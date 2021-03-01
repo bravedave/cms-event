@@ -13,7 +13,7 @@
     { "type": "git", "url": "https://github.com/bravedave/dvc" }
   ],
   "require": {
-    "bravedave/green": "dev-master"
+    "bravedave/green": "*"
   },
   "autoload": {
     "psr-4": {
