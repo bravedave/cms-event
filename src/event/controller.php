@@ -10,7 +10,9 @@
 
 namespace cms\event;
 
+use green;
 use Json;
+use Response;
 use strings;
 
 class controller extends \Controller {
@@ -69,6 +71,25 @@ class controller extends \Controller {
       }
 
     }
+    elseif ( 'search-people' == $action) {
+      if ( $term = $this->getPost('term')) {
+
+				Json::ack( $action)
+					->add( 'term', $term)
+					->add( 'data', green\search::people( $term));
+
+			} else { Json::nak( $action); }
+
+    }
+    elseif ( 'search-properties' == $action) {
+			if ( $term = $this->getPost('term')) {
+				Json::ack( $action)
+					->add( 'term', $term)
+					->add( 'data', green\search::properties( $term));
+
+			} else { Json::nak( $action); }
+
+    }
     else {
       parent::postHandler();
 
@@ -77,14 +98,52 @@ class controller extends \Controller {
   }
 
   function appointment() {
-    $dao = new dao\diary_events;
     $this->data = (object)[
       'title' => $this->title = 'New Event',
-      'diaryEvents' => $dao->getDiaryEvents()
+      'events' => [],
+      'users' => [],
 
     ];
 
+
+    $dao = new dao\diary_events;
+    if ( $res = $dao->getAll( 'event_name, appointment_inspection, comment_not_required, exclude_for_user')) {
+      foreach( $res->dtoSet() as $d) {
+        if ( $hidden = dao\diary_events::isHidden( $d)) continue;
+
+        $this->data->events[] = (object)[
+          'event' => $d->event_name,
+          'appointment_inspection' => (int)$d->appointment_inspection,
+          'comment_not_required' => (int)$d->comment_not_required
+
+        ];
+
+      }
+
+    }
+
+    $dao = new dao\users;
+    if ( $res = $dao->getActive()) {
+      $this->data->users = $res->dtoSet();
+
+    }
+
     $this->load('appointment');
+
+  }
+
+  public function js( $lib = '') {
+    $s = [];
+    $r = [];
+
+    $s[] = '@{{route}}@';
+    $r[] = strings::url( $this->route);
+
+    $js = \file_get_contents( __DIR__ . '/js/custom.js');
+    $js = preg_replace( $s, $r, $js);
+
+    Response::javascript_headers();
+    print $js;
 
   }
 
