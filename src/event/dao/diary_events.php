@@ -1,0 +1,204 @@
+<?php
+/*
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
+
+namespace cms\event\dao;
+
+use dao\_dao;
+
+class diary_events extends _dao {
+	protected $_db_name = 'diary_events';
+	protected $template = __NAMESPACE__ . '\dto\diary_events';
+
+	protected static $_buffer = false;
+
+	protected function BufferAll() {
+		if ( !self::$_buffer) {
+			if ( $res = $this->getAll('event_name, icon')) {
+				self::$_buffer = $res->dtoSet();
+
+      }
+
+		}
+
+	}
+
+	public function getAll( $fields = '*', $order = 'ORDER BY `order` ASC, `event_name` ASC' ) {
+		return ( parent::getAll( $fields, $order));
+
+	}
+
+  public function getEventByName( string $name) : ?dto\diary_events {
+    $sql = sprintf( 'SELECT * FROM `diary_events` WHERE `event_name` = "%s"', $name );
+    if ( $res = $this->Result( $sql)) {
+      if ( $dto = $res->dto( $this->template))
+        return $dto;
+
+    }
+
+    return null;
+
+  }
+
+	public function IconFor( $event) {
+
+		$reEvents = [
+			'RE Enquiry',
+			'REEnq',
+
+    ];
+
+		if ( in_array( $event, $reEvents)) return ( config::$RE_ICON);
+
+
+		if ( in_array( $event, \sys::events)) {
+			return ( sprintf(  '<img src="%s" title="%s" role="icon" class="cms-icon" />',  \sys::IconForEvent( $event ), $event));
+
+		}
+
+		if ( $event == 'Rent Inspect') {
+			return ( \cms\icon::rent_inspect);
+
+		}
+
+		$this->BufferAll();
+		if ( self::$_buffer) {
+			foreach( self::$_buffer as $dto) {
+				if ( $event == $dto->event_name) {
+					if ( $dto->icon) {
+						return ( \html::icon( $dto->icon, $event));
+
+          }
+					else {
+						return ( \html::icon( $dto->event_name, $event));
+
+          }
+
+				}
+
+			}
+
+		}
+
+		return ( \html::icon( $event, $event));
+
+	}
+
+	public static function isHidden( $dto) : bool {
+		if ( trim( $dto->exclude_for_user, '; ')) {
+			$users = explode( ';', trim( $dto->exclude_for_user, '; '));
+			if ( in_array( \currentUser::id(), $users)) {
+				return ( true);
+
+			}
+
+		}
+
+		return ( false);
+
+	}
+
+  public function populate_defaults() {
+
+    if ( $res = $this->Result( 'SELECT count(*) `count` FROM diary_events' )) {
+      if ( $dto = $res->dto()) {
+        if ( $dto->count < 1) {
+          $a = [
+            'FU',
+            'PH',
+            'Insp',
+            'Prop Enq',
+            'OH',
+            'OHFU',
+            'List Pres',
+            'Sell Enq',
+            'Meet',
+            'Gen Enq',
+            'App',
+            'Gen',
+            'Pro Sell',
+            'Info'
+
+          ];
+
+          foreach ( $a as $v ) $this->Insert(['event_name' => $v]);
+          \sys::logger( 'wrote diary_events defaults');
+
+        }
+
+      }
+
+    }
+
+    if ( $dto = $this->getEventByName('Buy Insp')) {
+      if ( !$dto->system_event || !$dto->appointment_inspection) {
+        $this->UpdateByID([
+          'system_event' => 1,
+          'appointment_inspection' => 1
+
+        ], $dto->id );
+
+      }
+
+    }
+    else {
+      $this->Insert([
+				'event_name' => 'Buy Insp',
+				'system_event' => 1,
+				'appointment_inspection' => 1
+
+      ]);
+
+    }
+
+    if ( $dto = $this->getEventByName('2nd Insp')) {
+      if ( !$dto->system_event || !$dto->appointment_inspection) {
+        $this->UpdateByID([
+          'system_event' => 1,
+          'appointment_inspection' => 1
+
+        ], $dto->id );
+
+      }
+
+    }
+    else {
+      $this->Insert([
+				'event_name' => '2nd Insp',
+				'system_event' => 1,
+				'appointment_inspection' => 1
+
+      ]);
+
+    }
+
+    if ( $dto = $this->getEventByName('2nd Insp')) {
+      if ( !$dto->system_event || !$dto->appointment_inspection) {
+        $this->UpdateByID([
+          'system_event' => 1,
+          'appointment_inspection' => 1
+
+        ], $dto->id);
+
+      }
+
+    }
+    else {
+      $this->Insert([
+				'event_name' => 'OH Insp',
+				'system_event' => 1,
+				'appointment_inspection' => 1
+
+      ]);
+
+    }
+
+  }
+
+}

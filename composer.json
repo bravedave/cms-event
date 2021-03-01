@@ -1,25 +1,37 @@
 {
-    "name": "bravedave/mvp",
-    "description": "Minimum Viable Product",
-    "minimum-stability": "dev",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Dave Bray",
-            "email": "david@brayworth.com.au"
-        }
-    ],
-    "repositories": [
-        { "type": "git", "url": "https://github.com/bravedave/dvc" }
-    ],
-    "require": {
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "": "src/app/"
-
-        }
+  "name": "bravedave/cms-event",
+  "description": "CMS Event",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dave Bray",
+      "email": "david@brayworth.com.au"
+    }
+  ],
+  "repositories": [
+    { "type": "git", "url": "https://github.com/bravedave/dvc" }
+  ],
+  "require": {
+    "bravedave/green": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "cms\\event\\": "src/event/"
 
     }
+
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "": "src/app/"
+
+    }
+
+  },
+  "scripts": {
+    "post-update-cmd": "cms\\event\\postUpdate::upgrade"
+
+  }
 
 }
