@@ -26,7 +26,7 @@ class controller extends \Controller {
 
     $secondary = ['index'];
 
-    if ( config::$INSPECTDIARY_DEVELOPER ) {
+    if ( config::$_CMS_EVENT_DEVELOPER) {
       $secondary[] = 'index-developer';
 
     }
@@ -40,8 +40,50 @@ class controller extends \Controller {
 
   }
 
+  protected function postHandler() {
+    $action = $this->getPost('action');
+    if ( 'getevents' == $action) {
+      $dao = new dao\diary_events;
+      if ( $res = $dao->getAll( 'event_name, appointment_inspection, comment_not_required, exclude_for_user')) {
+        $a = [];
+        foreach( $res->dtoSet() as $d) {
+          if ( $hidden = dao\diary_events::isHidden( $d)) continue;
+
+          $a[] = [
+            'event' => $d->event_name,
+            'appointment_inspection' => (int)$d->appointment_inspection,
+            'comment_not_required' => (int)$d->comment_not_required
+
+					];
+
+        }
+
+        Json::ack( $action)
+          ->add( 'data', $a);
+
+      }
+      else {
+        Json::nak( $action);
+
+      }
+
+    }
+    else {
+      parent::postHandler();
+
+    }
+
+  }
+
   function appointment() {
-    $this->loadModal('appointment');
+    $dao = new dao\diary_events;
+    $this->data = (object)[
+      'title' => $this->title = 'New Event',
+      'diaryEvents' => $dao->getDiaryEvents()
+
+    ];
+
+    $this->load('appointment');
 
   }
 
