@@ -21,6 +21,7 @@ class config extends \config {
   const calendar_sales = 11;
   const calendar_rental = 12;
 
+	static $_CMS_EVENT_DEVELOPER = false;
   static protected $_CMS_EVENT_VERSION = 0;
 
 	static protected function cms_event_version( $set = null) {
@@ -61,7 +62,8 @@ class config extends \config {
 
   static function cms_event_init() {
     $_a = [
-      'cms_event_version' => self::$_CMS_EVENT_VERSION
+      'cms_event_version' => self::$_CMS_EVENT_VERSION,
+      'cms_event_developer' => self::$_CMS_EVENT_DEVELOPER,
 
     ];
 
@@ -70,6 +72,7 @@ class config extends \config {
       $j = (object)array_merge( $_a, (array)Json::read( $config));
 
       self::$_CMS_EVENT_VERSION = (float)$j->cms_event_version;
+      self::$_CMS_EVENT_DEVELOPER = (float)$j->cms_event_developer;
 
 		}
 

@@ -10,6 +10,8 @@
 
 namespace cms\event\dao;
 
+use cms\event\config;
+
 use dao\_dao;
 
 class diary_events extends _dao {

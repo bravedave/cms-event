@@ -24,20 +24,24 @@ class controller extends \Controller {
 
     ];
 
+    $secondary = ['index'];
+
+    if ( config::$INSPECTDIARY_DEVELOPER ) {
+      $secondary[] = 'index-developer';
+
+    }
+
 		$this->render([
 			'title' => $this->title = 'Diary Events',
 			'primary' => 'list',
-			'secondary' => [
-        'index'
-
-      ]
+			'secondary' => $secondary
 
     ]);
 
   }
 
-  function add() {
-    $this->loadModal('event');
+  function appointment() {
+    $this->loadModal('appointment');
 
   }
 

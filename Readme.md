@@ -4,6 +4,6 @@
 
 #### Install
    ```
-   composer config repositories.bravedave-cms-event git https://github.com/bravedave/cms-event
+   composer config repositories.cms-event git https://github.com/bravedave/cms-event
    composer require bravedave/cms-event
    ```
