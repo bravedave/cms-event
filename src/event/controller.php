@@ -10,6 +10,7 @@
 
 namespace cms\event;
 
+use Json;
 use strings;
 
 class controller extends \Controller {
