@@ -121,6 +121,9 @@ class property_diary extends green\property_diary\dao\property_diary {
           }
 
           if ( isset( $dto->other_user_ids)) { /** legacy cms field */
+
+            \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
+
             if ( $dto->other_user_ids) {
               $_a = json_decode( $dto->other_user_ids);
               foreach( $_a as $_ou) {

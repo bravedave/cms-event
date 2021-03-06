@@ -269,7 +269,7 @@ class controller extends \Controller {
 
   }
 
-  function appointment() {
+  public function appointment() {
     $this->data = (object)[
       'title' => $this->title = 'New Event',
       'events' => [],
