@@ -46,13 +46,13 @@ class property_diary extends green\property_diary\dao\property_diary {
       ];
 
       if ( $this->db->field_exists('property_diary', 'item_user')) {
-        $a[] = '`pd`.`item_user`';
+        $fields[] = '`pd`.`item_user`';
 
       }
 
       if ( $this->db->field_exists('property_diary', 'other_user_ids')) {
-        \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
-        $a[] = '`pd`.`other_user_ids`';
+        // \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
+        $fields[] = '`pd`.`other_user_ids`';
 
       }
 
@@ -123,7 +123,7 @@ class property_diary extends green\property_diary\dao\property_diary {
 
           if ( isset( $dto->other_user_ids)) { /** legacy cms field */
 
-            \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
+            // \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
 
             if ( $dto->other_user_ids) {
               $_a = json_decode( $dto->other_user_ids);
