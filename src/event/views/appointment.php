@@ -152,7 +152,7 @@ use theme;  ?>
                         ?>
                         <div class="form-check">
                           <input type="checkbox" class="form-check-input" name="attendants[]"
-                            <?php if ( currentUser::id() == $user->id) print 'checked'; ?>
+                            <?php // if ( currentUser::id() == $user->id) print 'checked'; ?>
                             value="<?= $user->id ?>"
                             data-name="<?= $user->name ?>"
                             id="<?= $uid = strings::rand() ?>">
