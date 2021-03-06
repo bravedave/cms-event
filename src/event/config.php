@@ -14,7 +14,7 @@ use Json;
 
 class config extends \config {
   const label = 'CMS Event';
-	const cms_event_db_version = 1;
+	const cms_event_db_version = 1.1;
 
   const calendar_global = 1;
 

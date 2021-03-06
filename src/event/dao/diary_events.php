@@ -36,6 +36,36 @@ class diary_events extends _dao {
 
 	}
 
+  public function getCalendarEvents( int $iCal, $htmlSafe = false) : ?array {
+    // I don't think this is ever used
+    if ( $iCal) {
+      $sql = sprintf(
+        'SELECT `event_name` FROM `diary_events` WHERE `calendar` = %d',
+        $iCal
+
+      );
+
+      if ( $res = $this->Result( $sql)) {
+        $ret = [];
+        if ( $htmlSafe) {
+          while ( $dto = $res->dto()) $ret[] = \htmlspecialchars( $dto->event_name);
+
+        }
+        else {
+          while ( $dto = $res->dto()) $ret[] = $dto->event_name;
+
+        }
+
+        return $ret;
+
+      }
+
+    }
+
+    return null;
+
+  }
+
   public function getEventByName( string $name) : ?dto\diary_events {
     $sql = sprintf( 'SELECT * FROM `diary_events` WHERE `event_name` = "%s"', $name );
     if ( $res = $this->Result( $sql)) {
@@ -89,20 +119,6 @@ class diary_events extends _dao {
 		}
 
 		return ( \html::icon( $event, $event));
-
-	}
-
-	public static function isHidden( $dto) : bool {
-		if ( trim( $dto->exclude_for_user, '; ')) {
-			$users = explode( ';', trim( $dto->exclude_for_user, '; '));
-			if ( in_array( \currentUser::id(), $users)) {
-				return ( true);
-
-			}
-
-		}
-
-		return ( false);
 
 	}
 
@@ -202,5 +218,19 @@ class diary_events extends _dao {
     }
 
   }
+
+	public static function isHidden( $dto) : bool {
+		if ( trim( $dto->exclude_for_user, '; ')) {
+			$users = explode( ';', trim( $dto->exclude_for_user, '; '));
+			if ( in_array( \currentUser::id(), $users)) {
+				return ( true);
+
+			}
+
+		}
+
+		return ( false);
+
+	}
 
 }

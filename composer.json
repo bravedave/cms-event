@@ -9,29 +9,32 @@
       "email": "david@brayworth.com.au"
     }
   ],
-  "repositories": [
-    { "type": "git", "url": "https://github.com/bravedave/dvc" }
-  ],
+  "repositories": {
+    "bravedave-dvc": {
+      "type": "git",
+      "url": "https://github.com/bravedave/dvc"
+    },
+    "bravedave-dvc-cal": {
+      "type": "git",
+      "url": "https://github.com/bravedave/dvc-cal"
+    }
+
+  },
   "require": {
-    "bravedave/green": "*"
+    "bravedave/green": "*",
+    "bravedave/dvc-cal": "dev-master"
   },
   "autoload": {
     "psr-4": {
       "cms\\event\\": "src/event/"
-
     }
-
   },
   "autoload-dev": {
     "psr-4": {
-      "": "src/app/"
-
+      "": "src/app/app/"
     }
-
   },
   "scripts": {
     "post-update-cmd": "cms\\event\\postUpdate::upgrade"
-
   }
-
 }

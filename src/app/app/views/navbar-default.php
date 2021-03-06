@@ -28,13 +28,10 @@
 
     <div class="collapse navbar-collapse" id="<?= $_uid ?>">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="<?= strings::url('event') ?>">
-            Event
-
-          </a>
-
-        </li>
+        <!-- start : the appointment can be implemented -->
+        <li class="nav-item"><a class="nav-link" title="appointment" href="#" id="<?= $_uid = strings::rand() ?>">New Event</a></li>
+        <script>( _ => $('#<?= $_uid ?>').on( 'click', e => _.get.modal( _.url( 'event/appointment')))) (_brayworth_);</script>
+        <!-- end : the appointment can be implemented -->
 
         <li class="nav-item dropdown">
           <a class="nav-link pb-0 dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-label="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,6 +40,10 @@
           </a>
 
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+            <a class="dropdown-item" href="<?= strings::url('event') ?>">Diary Events</a>
+
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?= strings::url('people') ?>">People</a>
             <a class="dropdown-item" href="<?= strings::url('properties') ?>">Properties</a>
             <a class="dropdown-item" href="<?= strings::url('users') ?>">Users</a>
