@@ -181,7 +181,17 @@ class controller extends \Controller {
       } else { Json::nak( $action); }
 
     }
-    elseif ( 'diary-event-save' == $action) {
+    elseif ( 'delete' == $action) {
+			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
+				$dao = new dao\diary_events;
+				$dao->delete( $id);
+
+				Json::ack( $action);
+
+			} else { Json::nak( $action); }
+
+		}
+		elseif ( 'diary-event-save' == $action) {
 			$a = [
 				'order' => str_pad( trim( (string)$this->getPost('order')), 3, ' ', STR_PAD_LEFT ),
 				'event_name' => $this->getPost('event_name'),
@@ -298,6 +308,32 @@ class controller extends \Controller {
 					->add( 'data', green\search::properties( $term));
 
 			} else { Json::nak( $action); }
+
+    }
+    elseif ( 'toggle-hide-event' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\diary_events;
+        if ( $dto = $dao->getByID( $id)) {
+          $users = explode( ';', trim( $dto->exclude_for_user, '; '));
+          $key = array_search( (int)currentUser::id(), $users);
+
+          if ( $key === false) {
+            \Json::ack( sprintf( '%s : hide', $action))->add( 'hidden', 1);
+            $users[] = (int)currentUser::id();
+
+          }
+          else {
+            \Json::ack( sprintf( '%s : show', $action))->add( 'hidden', 0);
+            unset( $users[ $key]);
+
+          }
+
+          $a = [ 'exclude_for_user' => implode( ';', $users) . ';'];
+          $dao->UpdateByID( $a, $dto->id);
+
+        } else { \Json::nak( $action); }
+
+      } else { \Json::nak( $action); }
 
     }
     else {

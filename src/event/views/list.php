@@ -16,7 +16,7 @@ use strings;	?>
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
 
 <div class="table-responsive">
-  <table class="table table-sm">
+	<table class="table table-sm" id="<?= $_table = strings::rand() ?>">
     <thead class="small">
       <td colspan="3" class="text-center">order</td>
       <td>event</td>
@@ -35,10 +35,9 @@ use strings;	?>
         $hidden = dao\diary_events::isHidden( $dto);
 
           ?>
-      <tr role="diary_event-item"
+      <tr
         data-id="<?= $dto->id ?>"
         data-system_event="<?= (int)$dto->system_event ?>"
-        data-delete="<?= strings::url( 'diary_events/delete/' . $dto->id) ?>"
         data-order="<?= $dto->order ?>"
         data-hidden="<?= $hidden ? 'yes' : 'no' ?>">
 
@@ -65,9 +64,7 @@ use strings;	?>
 
           } ?></td>
         <td class="text-center"><?= ( $dto->comment_not_required ? '' : strings::html_tick ) ?></td>
-        <td class="text-center"><?php
-          print $daoDE->IconFor( $dto->event_name);
-          ?></td>
+        <td class="text-center"><?= $daoDE->IconFor( $dto->event_name) ?></td>
         <td class="text-center"><?= ( $dto->prospective_seller == 1 ? 'yes' : 'no' ) ?></td>
         <td class="text-center" HideFromMe><?= ( $hidden ? strings::html_tick : '&nbsp;' ) ?></td>
 
@@ -82,7 +79,7 @@ use strings;	?>
 </div>
 <script>
 ( _ => $(document).ready( () => {
-	$('tr[role="diary_event-item"]').each( function( i, tr) {
+	$('#<?= $_table ?> > tbody > tr').each( function( i, tr) {
 		let _tr = $(tr);
 
 		$('[role="move-up"]', tr).addClass('pointer').on( 'click', function( e) { e.stopPropagation(); e.preventDefault(); window.location.href = _.url( 'diary_events/moveup/' + _tr.data('id')); })
@@ -92,7 +89,62 @@ use strings;	?>
 			$('[role="move-up"]', tr).addClass('d-none');
 
 		/*---[ diary event item ]---*/
-		_tr.on( 'contextmenu', function( e ) {
+		_tr
+    .on( 'delete', function(e) {
+      let _tr = $(this);
+
+      _.ask({
+        headClass: 'text-white bg-danger',
+        text: 'Are you sure ?',
+        title: 'Confirm Delete',
+        buttons : {
+          yes : function(e) {
+
+            $(this).modal('hide');
+            _tr.trigger( 'delete-confirmed');
+
+          }
+
+        }
+
+      });
+
+    })
+    .on( 'delete-confirmed', function(e) {
+      let _tr = $(this);
+      let _data = _tr.data();
+
+      _.post({
+        url : _.url('<?= $this->route ?>'),
+        data : {
+          action : 'delete',
+          id : _data.id
+
+        },
+
+      }).then( d => {
+        if ( 'ack' == d.response) {
+          _tr.remove();
+          $('#<?= $_table ?>').trigger('update-line-numbers');
+
+        }
+        else {
+          _.growl( d);
+
+        }
+
+      });
+
+    })
+    .on( 'edit', function(e) {
+      let _tr = $(this);
+      let _data = _tr.data();
+
+			_.get.modal( '<?= $this->route ?>/edit/' + _data.id)
+			.then( modal => modal.on( 'success', e => window.location.reload()));
+
+    })
+		.on( 'contextmenu', function( e ) {
 			if ( e.shiftKey)
 				return;
 
@@ -106,8 +158,8 @@ use strings;	?>
 			_context.append( $('<a href="#"><i class="bi bi-pencil"></i><strong>edit</strong></a>').on( 'click', function( e) {
 				e.stopPropagation();e.preventDefault();
 
-				_.get.modal( '<?= $this->route ?>/edit/' + _data.id)
-				.then( modal => modal.on( 'success', e => window.location.reload()));
+				_context.close();
+				_me.trigger( 'edit');
 
 			}));
 
@@ -117,18 +169,18 @@ use strings;	?>
 				_context.close();
 
 				_.post({
-					url : _.url('diary_events'),
+					url : _.url('<?= $this->route ?>'),
 					data : {
 						action : 'toggle-hide-event',
-						id : _tr.data('id')
+						id : _data.id
 
 					}
 
 				}).then( function( d) {
 					_.growl( d);
 					if ( 'ack' == d.response) {
-						_tr.data('hidden', d.hidden == '1' ? 'yes' : 'no');
-						$('[HideFromMe]', tr).html( d.hidden == '1' ? '<?= strings::html_tick ?>' : '&nbsp;');
+						_me.data('hidden', d.hidden == '1' ? 'yes' : 'no');
+						$('[HideFromMe]', _me).html( d.hidden == '1' ? '<?= strings::html_tick ?>' : '&nbsp;');
 
 					}
 
@@ -136,42 +188,25 @@ use strings;	?>
 
 			});
 
-			if ( 'yes' == _tr.data('hidden')) {
-				ctrl.prepend('<i class="bi bi-check"></i>');
-
-			}
+			if ( 'yes' == _data.hidden) ctrl.prepend('<i class="bi bi-check"></i>');
 
 			_context.append( ctrl);
 
-	<?php	if ( currentUser::isAdmin()) {	?>
+			<?php	if ( currentUser::isAdmin()) {	?>
 
-			if ( _tr.data('system_event') != '1') {
-				_context.append( '<hr />');
-				_context.append( $('<a href="#"><i class="bi bi-trash"></i>delete</a>').on( 'click', function( e ) {
-					e.stopPropagation();e.preventDefault();
+				if ( _data.system_event != '1') {
+					_context.append( '<hr>');
+					_context.append( $('<a href="#"><i class="bi bi-trash"></i>delete</a>').on( 'click', function( e) {
+						e.stopPropagation();e.preventDefault();
 
-					_context.close();
+						_context.close();
+						_me.trigger( 'delete');
 
-					_.modal({
-						title: 'Are you Sure ?',
-						text : 'delete this record',
-						width: 350,
-						buttons : {
-							yes : function() {
-								hourglass.on();
-								window.location.href = _tr.data('delete');
+					}));
 
-							}
+				}
 
-						}
-
-					});
-
-				}));
-
-			}
-
-	<?php	}	// if ( currentYser::isAdmin())	?>
+			<?php	}	// if ( currentYser::isAdmin())	?>
 
 			_context.open( e);
 

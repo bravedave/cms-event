@@ -11,6 +11,7 @@
 namespace cms\event\dao;
 
 use cms\event\config;
+use currentUser;
 
 use dao\_dao;
 
@@ -89,7 +90,7 @@ class diary_events extends _dao {
 		if ( in_array( $event, $reEvents)) return ( config::$RE_ICON);
 
 
-		if ( in_array( $event, \sys::events)) {
+		if ( in_array( $event, config::system_events)) {
 			return ( sprintf(  '<img src="%s" title="%s" role="icon" class="cms-icon" />',  \sys::IconForEvent( $event ), $event));
 
 		}
@@ -222,7 +223,7 @@ class diary_events extends _dao {
 	public static function isHidden( $dto) : bool {
 		if ( trim( $dto->exclude_for_user, '; ')) {
 			$users = explode( ';', trim( $dto->exclude_for_user, '; '));
-			if ( in_array( \currentUser::id(), $users)) {
+			if ( in_array( (int)currentUser::id(), $users)) {
 				return ( true);
 
 			}
