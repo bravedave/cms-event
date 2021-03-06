@@ -38,7 +38,6 @@ use strings;	?>
       <tr role="diary_event-item"
         data-id="<?= $dto->id ?>"
         data-system_event="<?= (int)$dto->system_event ?>"
-        data-href="<?= strings::url( 'diary_events/edit/' . $dto->id) ?>"
         data-delete="<?= strings::url( 'diary_events/delete/' . $dto->id) ?>"
         data-order="<?= $dto->order ?>"
         data-hidden="<?= $hidden ? 'yes' : 'no' ?>">
@@ -100,9 +99,17 @@ use strings;	?>
 			e.stopPropagation(); e.preventDefault();
 
 			_.hideContexts();
+			let _me = $(this);
+			let _data = _me.data();
 			let _context = _.context();
 
-			_context.append( $('<a href="#"><i class="bi bi-pencil"></i><strong>edit</strong></a>').attr('href', _tr.data('href')));
+			_context.append( $('<a href="#"><i class="bi bi-pencil"></i><strong>edit</strong></a>').on( 'click', function( e) {
+				e.stopPropagation();e.preventDefault();
+
+				_.get.modal( '<?= $this->route ?>/edit/' + _data.id)
+				.then( modal => modal.on( 'success', e => window.location.reload()));
+
+			}));
 
 			let ctrl = $('<a href="#">hide</a>').on( 'click', function( e ) {
 				e.stopPropagation();e.preventDefault();

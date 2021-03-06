@@ -34,7 +34,19 @@ else {
 
 if ( currentUser::isAdmin()) {	?>
 <ul class="nav flex-column">
-	<li class="nav-item"><a class="nav-link" href="<?= strings::url( $this->route . '/edit') ?>"><i class="bi bi-plus"></i> Add new Event</a></li>
+	<li class="nav-item"><a class="nav-link" href="#" id="<?=$_uid = strings::rand() ?>"><i class="bi bi-plus"></i> Add new Event</a></li>
+	<script>
+	( _ => {
+		$('#<?= $_uid ?>').on( 'click', e => {
+			e.stopPropagation();e.preventDefault();
+
+			_.get.modal( '<?= $this->route ?>/edit/')
+			.then( modal => modal.on( 'success', e => window.location.reload()));
+
+		});
+
+	}) (_brayworth_);
+	</script>
 
 </ul>
 <?php }	// if ( currentUser::isAdmin())	?>

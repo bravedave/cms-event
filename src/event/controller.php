@@ -181,6 +181,44 @@ class controller extends \Controller {
       } else { Json::nak( $action); }
 
     }
+    elseif ( 'diary-event-save' == $action) {
+			$a = [
+				'order' => str_pad( trim( (string)$this->getPost('order')), 3, ' ', STR_PAD_LEFT ),
+				'event_name' => $this->getPost('event_name'),
+				'event_type' => $this->getPost('event_type'),
+				'icon' => $this->getPost('icon'),
+				'comment_not_required' => (int)$this->getPost('comment_not_required'),
+				'prospective_seller' => (int)$this->getPost('prospective_seller'),
+				'calendar' => (int)$this->getPost('calendar')
+
+      ];
+
+			$dao = new dao\diary_events;
+      if ( $id = (int)$this->getPost('id')) {
+        if ( $dto = $dao->getByID( $id)) {
+          if ( $dto->system_event) {
+            unset(
+              $a['event_name'],
+              $a['event_type'],
+              $a['icon'],
+              $a['prospective_seller'],
+              $a['comment_not_required']);
+
+          }
+
+          $dao->UpdateByID( $a, $id);
+          Json::ack( $action);
+
+        } else { Json::nak( $action); }
+
+      }
+      else {
+        $dao->Insert( $a);
+        Json::ack( $action);
+
+      }
+
+    }
     elseif ( 'get-feed' == $action) {
       /*
       ( _ => {
@@ -303,6 +341,40 @@ class controller extends \Controller {
     $this->load('appointment');
 
   }
+
+	public function edit( $id = 0) {
+		if ( $id = (int)$id) {
+			$dao = new dao\diary_events;
+			if ( $dto = $dao->getByID( $id)) {
+				$this->data = (object)[
+					'title' => $this->title = 'Edit Diary Event',
+					'action' => 'update',
+					'dto' => $dto
+
+        ];
+
+				$this->load('edit');
+
+			}
+			else {
+				$this->load( 'not-found');
+
+			}
+
+		}
+		else {
+			$this->data = (object)[
+				'action' => 'add',
+				'title' => $this->title = 'Add Diary Event',
+				'dto' => new dao\dto\diary_events
+
+      ];
+
+			$this->load('edit');
+
+		}
+
+	}
 
   public function js( $lib = '') {
     $s = [];

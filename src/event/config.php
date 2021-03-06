@@ -21,6 +21,47 @@ class config extends \config {
   const calendar_sales = 11;
   const calendar_rental = 12;
 
+  const calendars = [
+    'Global' => self::calendar_global,
+    'Sales' => self::calendar_sales,
+    'Rentals' => self::calendar_rental,
+
+  ];
+
+	const system_events = [
+		'Appointment',
+		'Bulk Email',
+		'Email',
+		'Email Inbound',
+		'Email Noted',
+		'Email xTag',
+		'EmailSent',
+		'Info',
+		'Inspect',
+		'inspect-pending',
+		'Lead Archive',
+		'List Prop',
+		'OH Inspect',
+		'OH Inspect - Casual',
+		'PH Call',
+		'phone-in',
+		'Reminder',
+		'RE Enquiry',
+		'REEnq',
+		'Buy Enq',
+		'Prop Enq',
+		'sms-arrears',
+		'SMS',
+		'SMS IN',
+		'Task',
+		'p4s', 'p2s',
+		'Cont Sign',
+		'Cont Cond',
+		'Cont Sett',
+		'webdoc'
+
+	];
+
 	static $_CMS_EVENT_DEVELOPER = false;
   static protected $_CMS_EVENT_VERSION = 0;
 
