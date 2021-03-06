@@ -364,7 +364,7 @@ use theme;  ?>
 
       }
       else {
-        $('#<?= $_accordion ?>_people_button').html( 'select users');
+        $('#<?= $_accordion ?>_people_button').html( 'select attendees');
 
       }
 
