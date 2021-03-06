@@ -51,6 +51,7 @@ class property_diary extends green\property_diary\dao\property_diary {
       }
 
       if ( $this->db->field_exists('property_diary', 'other_user_ids')) {
+        \sys::logger( sprintf('<%s> %s', 'with other_user_ids', __METHOD__));
         $a[] = '`pd`.`other_user_ids`';
 
       }
