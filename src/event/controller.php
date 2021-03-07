@@ -291,6 +291,29 @@ class controller extends \Controller {
       }
 
     }
+    elseif ( 'move' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\diary_events;
+        if ( $dto = $dao->getByID( $id)) {
+
+          $v = 'up' == $this->getPost('direction') ? -5 : 5;
+          $n = (int)$dto->order + (int)$v;
+
+          if ( $n < 1) $n = '';
+
+          $order = str_pad( trim( (string)$n), 3, ' ', STR_PAD_LEFT);
+          $a = [ 'order' => $order ];
+
+          $dao->UpdateByID( $a, $dto->id);
+
+          \Json::ack( $action)
+            ->add( 'order', $order);
+
+        } else { \Json::nak( $action); }
+
+      } else { \Json::nak( $action); }
+
+    }
     elseif ( 'search-people' == $action) {
       if ( $term = $this->getPost('term')) {
 
@@ -336,10 +359,7 @@ class controller extends \Controller {
       } else { \Json::nak( $action); }
 
     }
-    else {
-      parent::postHandler();
-
-    }
+    else { parent::postHandler(); }
 
   }
 

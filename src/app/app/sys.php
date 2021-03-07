@@ -43,8 +43,6 @@ class sys extends dvc\sys {
 	// 'Cont Sett',
 	// 'webdoc'
 
-	static $RE_ICON = '<i class="bi bi-house-fill text-danger"></i>';
-
 	static function IconForEvent( string $event) : string {
 		return '';
 

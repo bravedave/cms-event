@@ -147,7 +147,7 @@ $dto = $this->data->dto;  ?>
 					</div>
 
 					<div class="form-row mb-2">
-						<div class="col text-muted">
+						<div class="col text-muted font-italic">
 							NOTE: If you change the event - and there are existing
 							events for this event, then you will detach that event
 							- probably NOT what you want to do

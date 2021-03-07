@@ -11,6 +11,7 @@
 namespace cms\event\dao;
 
 use cms\event\config;
+use cms\event\sys;
 use currentUser;
 
 use dao\_dao;
@@ -91,7 +92,7 @@ class diary_events extends _dao {
 
 
 		if ( in_array( $event, config::system_events)) {
-			return ( sprintf(  '<img src="%s" title="%s" role="icon" class="cms-icon" />',  \sys::IconForEvent( $event ), $event));
+			return ( sprintf(  '<img src="%s" title="%s" role="icon" class="cms-icon">',  sys::IconForEvent( $event ), $event));
 
 		}
 
