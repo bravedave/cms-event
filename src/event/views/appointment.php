@@ -16,6 +16,7 @@ use theme;  ?>
 
 <form id="<?= $_form = strings::rand() ?>" autocomplete="off">
   <input type="hidden" name="action" value="appointment-post">
+  <input type="hidden" name="id">
   <input type="hidden" name="people_id">
   <input type="hidden" name="property_id">
   <div class="modal fade" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
@@ -84,7 +85,7 @@ use theme;  ?>
                 <div class="col-form-label col-md-3">Person</div>
 
                 <div class="col">
-                  <input type="text" name="person_name" class="form-control">
+                  <input type="text" name="people_name" class="form-control">
 
                 </div>
 
@@ -120,7 +121,7 @@ use theme;  ?>
 
             </div>
 
-            <div class="card">
+            <div class="card"><!-- attendees -->
               <div id="<?= $_accordion ?>_people_heading">
                 <h2 class="mb-0">
                   <button class="btn btn-light btn-block text-left collapsed" type="button"
@@ -188,7 +189,7 @@ use theme;  ?>
 
             </div>
 
-            <div class="card">
+            <div class="card"><!-- target_user -->
               <div id="<?= $_accordion ?>_target_user_heading">
                 <h2 class="mb-0">
                   <button class="btn btn-light btn-block text-left collapsed" type="button"
@@ -318,14 +319,22 @@ use theme;  ?>
     $('input[name="end"]', '#<?= $_form ?>').on( 'change', CheckTimeFormat);
 
     $('input[name="target_user"]', '#<?= $_form ?>').on( 'change', function( e) {
-      let _me = $(this);
-      if ( <?= (int)currentUser::id() ?> == _me.val()) {
+      if ( Number( $('input[name="id"]', '#<?= $_form ?>').val()) > 0) {
         $('#<?= $_uidNotifyUser ?>').addClass( 'd-none');
         $('input[name="notify_target_user"]', '#<?= $_form ?>').prop('checked', false);
 
       }
       else {
-        $('#<?= $_uidNotifyUser ?>').removeClass( 'd-none');
+        let _me = $(this);
+        if ( <?= (int)currentUser::id() ?> == _me.val()) {
+          $('#<?= $_uidNotifyUser ?>').addClass( 'd-none');
+          $('input[name="notify_target_user"]', '#<?= $_form ?>').prop('checked', false);
+
+        }
+        else {
+          $('#<?= $_uidNotifyUser ?>').removeClass( 'd-none');
+
+        }
 
       }
 
@@ -463,7 +472,7 @@ use theme;  ?>
 
         });
 
-        $('input[name="person_name"]', '#<?= $_form ?>').autofill({
+        $('input[name="people_name"]', '#<?= $_form ?>').autofill({
           autoFocus: true,
           source: _.search.people,
           select: ( e, ui) => {

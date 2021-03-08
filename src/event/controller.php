@@ -109,6 +109,7 @@ class controller extends \Controller {
           'date_start' => date( 'Y-m-d H:i:s', strtotime( $start)),
           'date_end' => date( 'Y-m-d H:i:s', strtotime( $end)),
           'event' => 'Appointment',
+          'event_name' => $this->getPost('event'),
           'property_id' => $this->getPost('property_id'),
           'people_id' => $this->getPost('people_id'),
           'location' => $this->getPost('location'),
@@ -127,46 +128,53 @@ class controller extends \Controller {
 
         // subject is activity - property - person
 
-        $event = $this->getPost('event');
         $street = $this->getPost('address_street');
         $location = $this->getPost('location');
 
         $a['location'] = $location ? $location : $street;
 
-        $name = $this->getPost('person_name');
+        $name = $this->getPost('people_name');
         $_subject = [];
-        if ( $a['event']) $_subject[] = $event;
+        if ( $a['event_name']) $_subject[] = $a['event_name'];
         if ( $street) $_subject[] = $street;
         if ( $name) $_subject[] = $name;
         if ( $location) $_subject[] = sprintf('loc:%s', $location);
 
         $a['subject'] = implode(' - ', $_subject);
-        $a['created'] = $a['updated'];
 
         $dao = new dao\property_diary;
-        $dao->Insert( $a);
+        if ( $id = (int)$this->getPost( 'id')) {
+          $dao->UpdateByID( $a, $id);
+          Json::ack( $action);
 
-        if ( (int)$a['target_user'] && (int)$a['target_user'] != currentUser::id()) {
-          if ( 'yes' == $this->getPost('notify_target_user')) {
-            $dao = new dao\users;
-            if ( $u = $dao->getByID( $a['target_user'])) {
-              $msg = sprintf( "I have booked a %s for us on %s at %s %s%s - %s",
-                $a['event'],
-                strings::asLongDate( $a['date']),
-                $start_time,
-                $name ? sprintf( 'with %s ', $name) : '',
-                $a['location'] ? sprintf( 'at %s ', $a['location']) : '',
-                \currentUser::FirstName()
+        }
+        else {
+          $a['created'] = $a['updated'];
+          $dao->Insert( $a);
 
-              );
+          if ( (int)$a['target_user'] && (int)$a['target_user'] != currentUser::id()) {
+            if ( 'yes' == $this->getPost('notify_target_user')) {
+              $dao = new dao\users;
+              if ( $u = $dao->getByID( $a['target_user'])) {
+                $msg = sprintf( "I have booked a %s for us on %s at %s %s%s - %s",
+                  $a['event'],
+                  strings::asLongDate( $a['date']),
+                  $start_time,
+                  $name ? sprintf( 'with %s ', $name) : '',
+                  $a['location'] ? sprintf( 'at %s ', $a['location']) : '',
+                  \currentUser::FirstName()
 
-              if ( \class_exists('\cms\sms')) {
-                \cms\sms::notifyUser( $a['target_user'], $msg);
+                );
 
-              }
-              else {
-                \sys::logger( sprintf( '<\cms\sms - class not found> : %s', __METHOD__));
-                \sys::logger( sprintf( '<%s> : %s', $msg, __METHOD__));
+                if ( \class_exists('\cms\sms')) {
+                  \cms\sms::notifyUser( $a['target_user'], $msg);
+
+                }
+                else {
+                  \sys::logger( sprintf( '<\cms\sms - class not found> : %s', __METHOD__));
+                  \sys::logger( sprintf( '<%s> : %s', $msg, __METHOD__));
+
+                }
 
               }
 
@@ -174,9 +182,9 @@ class controller extends \Controller {
 
           }
 
-        }
+          Json::ack( $action);
 
-        Json::ack( $action);
+        }
 
       } else { Json::nak( $action); }
 
@@ -308,6 +316,33 @@ class controller extends \Controller {
 
           \Json::ack( $action)
             ->add( 'order', $order);
+
+        } else { \Json::nak( $action); }
+
+      } else { \Json::nak( $action); }
+
+    }
+    elseif ( 'property-diary-get-by-id' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\property_diary;
+        if ( $dto = $dao->getByID( $id)) {
+
+          $dto->address_street = '';
+          $dto->people_name = '';
+          if ( $dto->property_id) {
+            $dao = new dao\properties;
+            $dto->address_street = $dao->getFieldByID( $dto->property_id, 'address_street');
+
+          }
+
+          if ( $dto->people_id) {
+            $dao = new dao\people;
+            $dto->people_name = $dao->getFieldByID( $dto->people_id, 'name');
+
+          }
+
+          \Json::ack( $action)
+            ->add( 'data', $dto);
 
         } else { \Json::nak( $action); }
 
