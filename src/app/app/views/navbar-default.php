@@ -46,6 +46,7 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?= strings::url('people') ?>">People</a>
             <a class="dropdown-item" href="<?= strings::url('properties') ?>">Properties</a>
+            <a class="dropdown-item" href="<?= strings::url('property_diary') ?>">Property Diary</a>
             <a class="dropdown-item" href="<?= strings::url('users') ?>">Users</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="<?= strings::url('beds') ?>">Beds</a>
