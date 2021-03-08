@@ -22,7 +22,7 @@
   },
   "require": {
     "bravedave/green": "*",
-    "bravedave/dvc-cal": "dev-master"
+    "bravedave/dvc-cal": "*"
   },
   "autoload": {
     "psr-4": {
