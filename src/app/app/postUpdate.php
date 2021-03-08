@@ -8,17 +8,12 @@
  *
 */
 
-namespace cms\event;
-
-use application;
-use dvc;
-use green;
-
 class postUpdate extends dvc\service {
   protected function _upgrade() {
     config::route_register( 'people', 'green\\people\\controller');
     config::route_register( 'property', 'green\\properties\\controller'); // for some cms compatibility
     config::route_register( 'properties', 'green\\properties\\controller');
+    config::route_register( 'property_diary', 'green\\property_diary\\controller');
     config::route_register( 'beds', 'green\\beds_list\\controller');
     config::route_register( 'baths', 'green\\baths\\controller');
     config::route_register( 'property_type', 'green\\property_type\\controller');
@@ -36,7 +31,7 @@ class postUpdate extends dvc\service {
     green\properties\config::green_properties_checkdatabase();
     echo( sprintf('%s : %s%s', 'green updated', __METHOD__, PHP_EOL));
 
-    config::cms_event_checkdatabase();
+    cms\event\config::cms_event_checkdatabase();
     config::route_register( 'event', 'cms\event\controller');
     echo( sprintf('%s : %s%s', 'cms\event updated', __METHOD__, PHP_EOL));
 
