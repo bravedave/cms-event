@@ -22,6 +22,29 @@ class diary_events extends _dao {
 
 	protected static $_buffer = false;
 
+	protected function _isDiaryEvent( $event) {
+		$this->BufferAll();
+		if ( self::$_buffer) {
+			foreach( self::$_buffer as $dto) {
+				if ( $event == $dto->event_name) {
+					return ( true);
+
+				}
+
+			}
+
+		}
+
+		return ( false);
+
+	}
+
+	public static function isDiaryEvent( $event) {
+		$de = new self;
+		return ( $de->_isDiaryEvent( $event));
+
+	}
+
 	protected function BufferAll() {
 		if ( !self::$_buffer) {
 			if ( $res = $this->getAll('event_name, icon')) {
