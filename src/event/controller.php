@@ -341,6 +341,31 @@ class controller extends \Controller {
 
           }
 
+          if ( !$dto->event_name) { // legacy
+            $evt = trim( preg_replace( '@-.*@', '', $dto->subject));
+            if ( $evt && dao\diary_events::isDiaryEvent( $evt)) {
+              $dto->event_name = $evt;
+
+            }
+
+          }
+
+          if ( !$dto->target_user && isset( $dto->item_user) && $dto->item_user) $dto->target_user = $dto->item_user;  // legacy
+          if ( !$dto->attendants && isset( $dto->other_user_ids) && $dto->other_user_ids) { // legacy
+            $a = [];
+            $_a = json_decode( $dto->other_user_ids);
+            foreach( $_a as $_ou) {
+              if ( $_ou->user) {
+                $a[] = $_ou->user;
+
+              }
+
+            }
+
+            if ( $a) $dto->attendants = json_encode($a);
+
+          }
+
           \Json::ack( $action)
             ->add( 'data', $dto);
 
