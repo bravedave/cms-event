@@ -97,7 +97,16 @@ class controller extends \Controller {
 
   protected function postHandler() {
     $action = $this->getPost('action');
-    if ( 'appointment-post' == $action) {
+    if ( 'appointment-delete' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\property_diary;
+        $dao->delete( $id);
+        Json::ack( $action);
+
+      } else { Json::nak( $action); }
+
+    }
+    elseif ( 'appointment-post' == $action) {
 
       $start_time = $this->getPost('start');
       $start = sprintf( '%s %s', $this->getPost('date'), $start_time);
@@ -189,7 +198,7 @@ class controller extends \Controller {
       } else { Json::nak( $action); }
 
     }
-    elseif ( 'delete' == $action) {
+		elseif ( 'delete' == $action) {
 			if ( ( $id = (int)$this->getPost('id')) > 0 ) {
 				$dao = new dao\diary_events;
 				$dao->delete( $id);
