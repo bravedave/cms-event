@@ -8,7 +8,7 @@
  * */
 
 ( _ => {
-  $(document).on( 'edit-calendar-event', (e, event) => {
+  $(document).on( 'calendar-event-click', (e, event) => {
     let id = String( event.data.event.id)
       .replace( /@.*$/, '')
       .replace( /^property-diary-/, '');
