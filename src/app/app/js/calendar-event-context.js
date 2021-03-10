@@ -26,9 +26,9 @@
       if (Number(id) > 0) {
         e.stopPropagation();e.preventDefault();
 
-        _brayworth_.hideContexts();
+        _.hideContexts();
 
-        let _context = _brayworth_.context();
+        let _context = _.context();
 
         _context.append( $('<a href="#">delete</a>').on( 'click', function( e) {
           e.stopPropagation(); e.preventDefault();
