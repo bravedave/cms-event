@@ -19,7 +19,8 @@ use strings;
 
 class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
-  protected $jCalendarFilter = null;
+
+  private $jCalendarFilter = null;
 
   protected function _index() {
 
