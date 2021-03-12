@@ -19,8 +19,7 @@ use strings;
 
 class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
-
-  private $jCalendarFilter = null;
+  protected $_jCalendarFilter = null;
 
   protected function _index() {
 
@@ -47,7 +46,12 @@ class controller extends \Controller {
 
   }
 
-	protected function jCalendar( $iCal, $start, $end) : array {
+	protected function jCalendarSetFilter( $filter) {
+    $this->_jCalendarFilter = $filter;
+
+  }
+
+  protected function jCalendar( $iCal, $start, $end) : array {
     $debug = false;
     $ret = [];
 
