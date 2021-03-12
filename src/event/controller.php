@@ -46,12 +46,6 @@ class controller extends \Controller {
 
   }
 
-  protected function before() {
-    parent::before();
-    $this->jCalendarFilter = function( $dto) { return true; };
-
-  }
-
 	protected function jCalendar( $iCal, $start, $end) : array {
     $debug = false;
     $ret = [];
@@ -74,7 +68,17 @@ class controller extends \Controller {
 		if ( $dtoSet = $dao->getCalendar( $iCal, $start, $end)) {
       // sys::dump( $dtoSet);
 
-      $filter = $this->jCalendarFilter;
+      $filter = function( $dto) { return true; };
+      if ( $this->jCalendarFilter) {
+        $filter = $this->jCalendarFilter;
+        \sys::logger( sprintf('<%s> %s', 'filter', __METHOD__));
+
+      }
+      else {
+        \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
+
+      }
+
       foreach ($dtoSet as $dto) {
 
         if ( !$filter( $dto)) continue;
