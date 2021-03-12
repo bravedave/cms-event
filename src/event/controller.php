@@ -71,11 +71,6 @@ class controller extends \Controller {
       $filter = function( $dto) { return true; };
       if ( $this->jCalendarFilter) {
         $filter = $this->jCalendarFilter;
-        \sys::logger( sprintf('<%s> %s', 'filter', __METHOD__));
-
-      }
-      else {
-        \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
 
       }
 
