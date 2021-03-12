@@ -116,6 +116,7 @@ class property_diary extends green\property_diary\dao\property_diary {
               ];
 
               $os[] = \strings::Initials( $x->name);
+              if ( !$dto->target_user) $dto->target_user = $dto->item_user;
 
             }
 
@@ -127,8 +128,12 @@ class property_diary extends green\property_diary\dao\property_diary {
 
             if ( $dto->other_user_ids) {
               $_a = json_decode( $dto->other_user_ids);
+              $_ids = [];
               foreach( $_a as $_ou) {
                 if ( $_ou->user) {
+
+                  $_ids[] = $_ou->user;
+
                   $o[] = $x = (object)[
                     'id' => $_ou->user,
                     'name' => $dao->getFieldByID( $_ou->user, 'name')
@@ -141,6 +146,8 @@ class property_diary extends green\property_diary\dao\property_diary {
                 }
 
               }
+
+              if ( $_ids && !$dto->attendants) $dto->attendants = json_encode( $_ids);
 
             }
 
