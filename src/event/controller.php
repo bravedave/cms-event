@@ -46,7 +46,7 @@ class controller extends \Controller {
   }
 
 	protected function _jCalendar_filter( $dto) : bool {
-    // \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
+    \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
     return true;
 
   }
