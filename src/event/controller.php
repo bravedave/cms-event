@@ -19,6 +19,7 @@ use strings;
 
 class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
+  protected $jCalendarFilter = null;
 
   protected function _index() {
 
@@ -45,9 +46,9 @@ class controller extends \Controller {
 
   }
 
-	protected function _jCalendar_filter( $dto) : bool {
-    \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
-    return true;
+  protected function before() {
+    parent::before();
+    $this->jCalendarFilter = function( $dto) { return true; };
 
   }
 
@@ -73,9 +74,10 @@ class controller extends \Controller {
 		if ( $dtoSet = $dao->getCalendar( $iCal, $start, $end)) {
       // sys::dump( $dtoSet);
 
+      $filter = $this->jCalendarFilter;
       foreach ($dtoSet as $dto) {
 
-        if ( !$this->_jCalendar_filter( $dto)) continue;
+        if ( !$filter( $dto)) continue;
 
         $start = new \DateTime( $dto->date_start == '0000-00-00 00:00:00' ? $dto->date . ' ' . $autotime : $dto->date_start);
         $end = new \DateTime( $dto->date_end == '0000-00-00 00:00:00' ? $dto->date . ' ' . $autotime : $dto->date_end);
