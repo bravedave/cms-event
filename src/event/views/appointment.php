@@ -393,7 +393,7 @@ use theme;  ?>
       let tu = $('input[name="target_user"]:checked', this);
       if (tu.length > 0) {
         let _data = tu.data();
-        s = '<span class="text-monospace">usr.</span>' + _data.name;
+        s = '<span class="text-monospace">tm..</span>' + _data.name;
 
       }
 

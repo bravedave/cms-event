@@ -45,6 +45,12 @@ class controller extends \Controller {
 
   }
 
+	protected function _jCalendar_filter( $dto) : bool {
+    // \sys::logger( sprintf('<%s> %s', 'no filter', __METHOD__));
+    return true;
+
+  }
+
 	protected function jCalendar( $iCal, $start, $end) : array {
     $debug = false;
     $ret = [];
@@ -68,6 +74,9 @@ class controller extends \Controller {
       // sys::dump( $dtoSet);
 
       foreach ($dtoSet as $dto) {
+
+        if ( !$this->_jCalendar_filter( $dto)) continue;
+
         $start = new \DateTime( $dto->date_start == '0000-00-00 00:00:00' ? $dto->date . ' ' . $autotime : $dto->date_start);
         $end = new \DateTime( $dto->date_end == '0000-00-00 00:00:00' ? $dto->date . ' ' . $autotime : $dto->date_end);
         $diff = $end->getTimestamp() - $start->getTimestamp();
@@ -434,7 +443,7 @@ class controller extends \Controller {
 
   public function appointment() {
     $this->data = (object)[
-      'title' => $this->title = 'New Event',
+      'title' => $this->title = 'New Appointment',
       'events' => [],
       'users' => [],
 
