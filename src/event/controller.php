@@ -46,7 +46,7 @@ class controller extends \Controller {
 
   }
 
-	protected function jCalendarSetFilter( $filter) {
+	private function jCalendarSetFilter( $filter) {
     $this->_jCalendarFilter = $filter;
 
   }
