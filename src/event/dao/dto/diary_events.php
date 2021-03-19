@@ -18,6 +18,7 @@ class diary_events extends _dto {
   public $system_event = 0;
   public $prospective_seller = 0;
   public $comment_not_required = 0;
+  public $multi_day = 0;
   public $appointment_inspection = 0;
   public $event_type = '';
   public $order = '';

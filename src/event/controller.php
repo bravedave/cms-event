@@ -21,6 +21,12 @@ class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
   protected $jCalendarFilter = null;
 
+	protected function before() {
+		config::cms_event_checkdatabase();
+		parent::before();
+
+	}
+
   protected function _index() {
 
     $dao = new dao\diary_events;
@@ -89,7 +95,7 @@ class controller extends \Controller {
           'start' => $start->format('c'),
           'end' => $diff < 1801 ? $start->format('c') : $end->format('c'),
           'id' => sprintf( 'property-diary-%d@cms-event', $dto->id),
-          'allDay' => 0,
+          'allDay' => (int)('00:00' == $start->format( 'HH:mm') && '23:59' == $end->format( 'HH:mm')),
           'changekey' => '',
           'src' => 'property_diary'
 
@@ -118,9 +124,18 @@ class controller extends \Controller {
     }
     elseif ( 'appointment-post' == $action) {
 
-      $start_time = $this->getPost('start');
-      $start = sprintf( '%s %s', $this->getPost('date'), $start_time);
-      $end = sprintf( '%s %s', $this->getPost('date'), $this->getPost('end'));
+      $multiday = (int)$this->getPost('multiday');
+      if ( $multiday) {
+        $start = sprintf( '%s 00:00:00', $this->getPost('date'));
+        $end = sprintf( '%s 23:59:59', $this->getPost('date_end'));
+
+      }
+      else {
+        $start_time = $this->getPost('start');
+        $start = sprintf( '%s %s', $this->getPost('date'), $start_time);
+        $end = sprintf( '%s %s', $this->getPost('date'), $this->getPost('end'));
+
+      }
 
       if ( strtotime( $start) > 0 && strtotime( $end) > strtotime( $start)) {
         $a = [
@@ -225,6 +240,7 @@ class controller extends \Controller {
 				'event_type' => $this->getPost('event_type'),
 				'icon' => $this->getPost('icon'),
 				'comment_not_required' => (int)$this->getPost('comment_not_required'),
+				'multi_day' => (int)$this->getPost('multi_day'),
 				'prospective_seller' => (int)$this->getPost('prospective_seller'),
 				'calendar' => (int)$this->getPost('calendar')
 
@@ -239,7 +255,10 @@ class controller extends \Controller {
               $a['event_type'],
               $a['icon'],
               $a['prospective_seller'],
-              $a['comment_not_required']);
+              $a['multi_day'],
+              $a['comment_not_required']
+
+            );
 
           }
 
@@ -452,13 +471,13 @@ class controller extends \Controller {
 
 
     $dao = new dao\diary_events;
-    if ( $res = $dao->getAll( 'event_name, appointment_inspection, comment_not_required, exclude_for_user')) {
+    if ( $res = $dao->getAll( 'event_name, multi_day, comment_not_required, exclude_for_user')) {
       foreach( $res->dtoSet() as $d) {
         if ( $hidden = dao\diary_events::isHidden( $d)) continue;
 
         $this->data->events[] = (object)[
           'event' => $d->event_name,
-          'appointment_inspection' => (int)$d->appointment_inspection,
+          'multi_day' => (int)$d->multi_day,
           'comment_not_required' => (int)$d->comment_not_required
 
         ];

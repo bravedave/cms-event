@@ -97,6 +97,23 @@ $dto = $this->data->dto;  ?>
 					</div>
 
 					<div class="form-row mb-2">
+						<div class="offset-3 col">
+							<div class="form-check">
+								<input type="checkbox" class="form-check-input" name="multi_day" id="<?= $_uid = strings::rand() ?>" value="1"
+									<?= $dto->multi_day ? 'checked' : '' ?>>
+
+								<label class="form-check-label" for="<?= $_uid ?>">
+									Multi Day Event
+
+								</label>
+
+							</div>
+
+						</div>
+
+					</div>
+
+					<div class="form-row mb-2">
 						<div class="col-3">Triggers</div>
 
 						<div class="col">

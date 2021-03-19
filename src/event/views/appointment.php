@@ -19,6 +19,7 @@ use theme;  ?>
   <input type="hidden" name="id">
   <input type="hidden" name="people_id">
   <input type="hidden" name="property_id">
+  <input type="hidden" name="multiday" value="0">
   <div class="modal fade" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -34,11 +35,20 @@ use theme;  ?>
             <div id="<?= $_accordion ?>_appointment" class="collapse show" aria-labelledby="<?= $_accordion ?>_appointment_heading" data-parent="#<?= $_accordion ?>">
               <div class="form-row mb-2"><!-- date, start time, end time -->
                 <div class="col mb-2 mb-md-0">
-                  <input type="date" class="form-control" name="date" required>
+                  <div class="input-group">
+                    <input type="date" class="form-control" name="date" required>
+
+                    <div class="input-group-append d-none" data-set="date_end" data-frame="multiday">
+                      <div class="input-group-text">-</div>
+                    </div>
+
+                    <input type="date" class="form-control d-none" name="date_end" data-set="date_end" data-frame="multiday">
+
+                  </div>
 
                 </div>
 
-                <div class="col-md">
+                <div class="col-md" data-set="date_end" data-frame="oneday">
                   <div class="form-row">
                     <div class="col">
                       <div class="input-group">
@@ -68,7 +78,9 @@ use theme;  ?>
                     <option></option>
                     <?php foreach ($this->data->events as $e) {
                       printf(
-                        '<option>%s</option>',
+                        '<option value="%s" data-multiday="%s">%s</option>',
+                        $e->event,
+                        $e->multi_day,
                         $e->event
 
                       );
@@ -317,6 +329,35 @@ use theme;  ?>
     // console.log( $('input[name="start"]', '#<?= $_form ?>'));
 
     $('input[name="end"]', '#<?= $_form ?>').on( 'change', CheckTimeFormat);
+
+    $('select[name="event"]', '#<?= $_form ?>').on( 'change', function(e) {
+      let _me = $(this);
+      let option = $('option[value="' + _me.val() + '"]', this);
+      if ( option.length > 0) {
+        let _opt_data = option.data();
+
+        // console.log( option);
+        $('input[name="multiday"]', '#<?= $_form ?>').val( _opt_data.multiday);
+        $('input[name="start"], input[name="end"]', '#<?= $_form ?>').prop( 'required', '1' != _opt_data.multiday);
+
+        $('[data-set="date_end"]', '#<?= $_form ?>').each( (i, el) => {
+          let _me = $(el);
+          let _data = _me.data();
+
+          if ( '1' == _opt_data.multiday) {
+            'oneday' == _data.frame ? _me.addClass( 'd-none') : _me.removeClass( 'd-none');
+
+          }
+          else {
+            'oneday' == _data.frame ? _me.removeClass( 'd-none') : _me.addClass( 'd-none');
+
+          }
+
+        });
+
+      }
+
+    });
 
     $('input[name="target_user"]', '#<?= $_form ?>').on( 'change', function( e) {
       if ( Number( $('input[name="id"]', '#<?= $_form ?>').val()) > 0) {
