@@ -507,11 +507,13 @@ use theme;  ?>
           },
 
         })
-        .on( 'keyup', function(e) {
+        .on( 'keyup', function(e) { $(this).trigger('update-placeholder'); })
+        .on( 'update-placeholder', function(e) {
           let _me = $(this);
           loc.attr( 'placeholder', _me.val());
 
-        });
+        })
+        .trigger('update-placeholder');
 
         $('input[name="people_name"]', '#<?= $_form ?>').autofill({
           autoFocus: true,
