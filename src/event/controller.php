@@ -170,7 +170,7 @@ class controller extends \Controller {
         $name = $this->getPost('people_name');
         $_subject = [];
         if ( $a['event_name']) $_subject[] = $a['event_name'];
-        if ( $street) $_subject[] = $street;
+        if ( $street) $_subject[] = strings::GoodStreetString( $street);
         if ( $name) $_subject[] = $name;
         if ( $location) $_subject[] = sprintf('loc:%s', $location);
 
