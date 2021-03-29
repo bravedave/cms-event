@@ -388,6 +388,11 @@ class controller extends \Controller {
 
           }
 
+          if ( strtotime( $dto->date_start) < 0) {
+            $dto->date_start = $dto->date;
+
+          }
+
           if ( !$dto->target_user && isset( $dto->item_user) && $dto->item_user) $dto->target_user = $dto->item_user;  // legacy
           if ( !$dto->attendants && isset( $dto->other_user_ids) && $dto->other_user_ids) { // legacy
             $a = [];
