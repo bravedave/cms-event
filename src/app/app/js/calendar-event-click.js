@@ -61,7 +61,10 @@
 
               $('input[name="target_user"][value="' + d.data.target_user + '"]', modal).prop('checked', true);
 
-              modal.on('shown.bs.modal', e => $('input[name="start"]', modal).focus());
+              modal
+              .off('shown.bs.modal')
+              .on('shown.bs.modal', e => $('input[name="start"]', modal).focus());
+
               modal.on('success', e => $(document).trigger('load-active-feeds'));
 
             });

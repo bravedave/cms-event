@@ -18,6 +18,7 @@ use theme;  ?>
   <input type="hidden" name="action" value="appointment-post">
   <input type="hidden" name="id">
   <input type="hidden" name="people_id">
+  <input type="hidden" name="people_email"><!-- not saved, required to activate send invite -->
   <input type="hidden" name="property_id">
   <input type="hidden" name="multiday" value="0">
   <div class="modal fade" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
@@ -98,6 +99,19 @@ use theme;  ?>
 
                 <div class="col">
                   <input type="text" name="people_name" class="form-control">
+
+                </div>
+
+              </div>
+
+              <div class="form-row mb-2 d-none" envelope><!-- invite person -->
+                <div class="offset-md-3 col">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="people_invite_on_save" value="yes" id="<?= $uid = strings::rand() ?>">
+
+                    <label class="form-check-label" for="<?= $uid ?>">send invite on save</label>
+
+                  </div>
 
                 </div>
 
@@ -447,6 +461,103 @@ use theme;  ?>
     });
 
     $('#<?= $_form ?>')
+    .on( 'activate-invite', function(e) {
+      let _form = $(this);
+      let _data = _form.serializeFormJSON();
+
+      if (Number(_data.id) < 1) { // only for new appointments
+        if (Number(_data.people_id) > 0) {  // only for valid people
+          if (String(_data.people_email).isEmail()) {  // only for people with valid email address
+            $('input[name="people_invite_on_save"]', '#<?= $_form ?>').closest('[envelope]').removeClass('d-none');
+
+          }
+          else {
+            $('input[name="people_invite_on_save"]', '#<?= $_form ?>').closest('[envelope]').addClass('d-none');
+            console.log( 'not inviting - no email');
+
+          }
+
+        }
+        else {
+          $('input[name="people_invite_on_save"]', '#<?= $_form ?>').closest('[envelope]').addClass('d-none');
+          console.log( 'not inviting - invalid person');
+
+        }
+
+      }
+      else {
+        $('input[name="people_invite_on_save"]', '#<?= $_form ?>').closest('[envelope]').addClass('d-none');
+        console.log( 'not inviting - appointment is not new');
+
+      }
+
+    })
+    .on( 'send-invite', function(e) {
+      let _form = $(this);
+      let _data = _form.serializeFormJSON();
+
+      let _date = _.dayjs( _data.date + ' ' + _data.start);
+      let format = 'dddd MMM D at ha';
+
+      if ( _date.isValid() && _date.unix() > 0) {
+        format = 'dddd MMM D';  // it's a valid date
+        if ( _date.hour() > 0) {
+          format = 'dddd MMM D [at] ha';
+          if ( Number( _date.minute()) > 0) {
+            format = 'dddd MMM D [at] h:m a';
+
+          }
+
+        }
+
+      }
+
+      let notes = [
+        '<strong>Appointment Details</strong>',
+        '',
+        'Date/time : ' + _date.format(format)
+
+      ];
+
+      if ( '' != _data.location) {
+        notes.push('Location : ' + _data.location);
+
+      }
+
+      if ( '' != _data.address_street) {
+        notes.push('Property : ' + _data.address_street);
+
+      }
+
+      if ( '' != _data.notes) {
+        notes.push('Notes :');
+        notes.push(_data.notes);
+
+      }
+
+      let em = {
+        to : _.email.rfc922({ name:_data.people_name, email:_data.people_email}),
+        subject : 'Appointment - ' + _date.format( format),
+        message : String(notes.join("<br>"))
+
+      }
+
+      if ( !!_.email && !!_.email.activate) {
+        let emc = new EmailClass(em);
+        _.email.activate( emc);
+        if ( String( _data.people_mobile).IsMobilePhone()) {
+          emc.ccSMSPush({ name:_data.people_name, mobile:_data.people_mobile});
+
+        }
+
+      }
+      else {
+        console.table( em);
+        _.ask.warning({title:'alert',text:'no email program to run'})
+
+      }
+
+    })
     .on( 'submit', function( e) {
       let _form = $(this);
       let _data = _form.serializeFormJSON();
@@ -460,6 +571,10 @@ use theme;  ?>
         }).then( d => {
           if ( 'ack' == d.response) {
             $('#<?= $_modal ?>').trigger('success');
+            if ($('input[name="people_invite_on_save"]', '#<?= $_form ?>').prop('checked')) {
+              _form.trigger('send-invite'); // before closing modal
+
+            }
 
           }
           else {
@@ -483,6 +598,12 @@ use theme;  ?>
 
       return false;
     });
+
+    $('#<?= $_modal ?>')
+    .on( 'shown.bs.modal', e => {
+      $('input[name="date"]', '#<?= $_form ?>').focus();
+
+    })
 
     $(document).ready( () => {
 
@@ -515,12 +636,19 @@ use theme;  ?>
         })
         .trigger('update-placeholder');
 
-        $('input[name="people_name"]', '#<?= $_form ?>').autofill({
+        $('input[name="people_name"]', '#<?= $_form ?>')
+        .autofill({
           autoFocus: true,
           source: _.search.people,
           select: ( e, ui) => {
             let o = ui.item;
+
+            // console.log(o);
+
             $('input[name="people_id"]', '#<?= $_form ?>').val( o.id);
+            $('input[name="people_email"]', '#<?= $_form ?>').val( o.email);
+            $('input[name="people_mobile"]', '#<?= $_form ?>').val( o.mobile);
+            $('#<?= $_form ?>').trigger( 'activate-invite');
 
           },
 

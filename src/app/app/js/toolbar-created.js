@@ -22,7 +22,10 @@
         _.get.modal( _.url( 'event/appointment'))
         .then( modal => {
           $('input[name="date"]', modal).val( _data.date);
-          modal.on('shown.bs.modal', e => $('input[name="start"]', modal).focus());
+
+          modal
+          .off('shown.bs.modal')
+          .on('shown.bs.modal', e => $('input[name="start"]', modal).focus());
 
         });
 
