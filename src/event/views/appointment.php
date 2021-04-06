@@ -21,7 +21,7 @@ use theme;  ?>
   <input type="hidden" name="people_email"><!-- not saved, required to activate send invite -->
   <input type="hidden" name="property_id">
   <input type="hidden" name="multiday" value="0">
-  <div class="modal fade" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
+  <div class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header <?= theme::modalHeader() ?> py-2">
