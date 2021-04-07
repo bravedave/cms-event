@@ -535,6 +535,12 @@ use theme;  ?>
 
       }
 
+      if ( !!window._cms_) {
+        notes.push( '');
+        notes.push( _cms_.currentUser.signoff);
+
+      }
+
       let em = {
         to : _.email.rfc922({ name:_data.people_name, email:_data.people_email}),
         subject : 'Appointment - ' + _date.format( format),
