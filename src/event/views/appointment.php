@@ -72,7 +72,7 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- activity -->
-                <div class="col-form-label col-md-3">Activity</div>
+                <div class="col-form-label col-2 col-md-3 text-truncate">Activity</div>
 
                 <div class="col">
                   <select name="event" class="form-control" required>
@@ -95,10 +95,17 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- person -->
-                <div class="col-form-label col-md-3">Person</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Person</div>
 
                 <div class="col">
-                  <input type="text" name="people_name" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text"><i class="bi bi-person"></i></div>
+                    </div>
+
+                    <input type="text" name="people_name" class="form-control">
+
+                  </div>
 
                 </div>
 
@@ -118,20 +125,34 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- address_street -->
-                <div class="col-form-label col-md-3">Property</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Property</div>
 
                 <div class="col">
-                  <input type="text" name="address_street" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text"><i class="bi bi-house-door"></i></div>
+                    </div>
+
+                    <input type="text" name="address_street" class="form-control">
+
+                  </div>
 
                 </div>
 
               </div>
 
               <div class="form-row mb-2"><!-- location -->
-                <div class="col-form-label col-md-3">Location</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Location</div>
 
                 <div class="col">
-                  <input type="text" name="location" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="bi bi-geo"></i></div>
+                    </div>
+
+                    <input type="text" name="location" class="form-control">
+
+                  </div>
 
                 </div>
 
