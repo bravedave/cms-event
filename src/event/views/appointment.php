@@ -524,10 +524,12 @@ use theme;  ?>
     .on( 'check-invite', function(e) {
       let _form = $(this);
       let _data = _form.serializeFormJSON();
+      let _date = _.dayjs( _data.date + ' ' + _data.start);
+      let format = 'dddd MMM D [at] ha';
 
       _.ask({
         title : 'Query',
-        text : _data.date + ' ' + _data.start
+        text : _data.date + ' ' + _data.start + '<br>' + _date.format(format)
 
       });
 
@@ -537,7 +539,7 @@ use theme;  ?>
       let _data = _form.serializeFormJSON();
 
       let _date = _.dayjs( _data.date + ' ' + _data.start);
-      let format = 'dddd MMM D at ha';
+      let format = 'dddd MMM D [at] ha';
 
       if ( _date.isValid() && _date.unix() > 0) {
         format = 'dddd MMM D';  // it's a valid date
