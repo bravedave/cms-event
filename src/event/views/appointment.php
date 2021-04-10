@@ -334,6 +334,7 @@ use theme;  ?>
         </div>
 
         <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary mr-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">close</button>
           <button type="submit" class="btn btn-primary">Save</button>
 
@@ -481,6 +482,13 @@ use theme;  ?>
 
     });
 
+    $('#<?= $_btnInfo ?>').on( 'click', function( e) {
+      e.stopPropagation();
+
+      $('#<?= $_form ?>').trigger('check-invite');
+
+    });
+
     $('#<?= $_form ?>')
     .on( 'activate-invite', function(e) {
       let _form = $(this);
@@ -511,6 +519,17 @@ use theme;  ?>
         console.log( 'not inviting - appointment is not new');
 
       }
+
+    })
+    .on( 'check-invite', function(e) {
+      let _form = $(this);
+      let _data = _form.serializeFormJSON();
+
+      _.ask({
+        title : 'Query',
+        text : _data.date + ' ' + _data.start
+
+      });
 
     })
     .on( 'send-invite', function(e) {
