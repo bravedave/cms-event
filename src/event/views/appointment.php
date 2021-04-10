@@ -72,7 +72,7 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- activity -->
-                <div class="col-form-label col-md-3">Activity</div>
+                <div class="col-form-label col-2 col-md-3 text-truncate">Activity</div>
 
                 <div class="col">
                   <select name="event" class="form-control" required>
@@ -95,10 +95,17 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- person -->
-                <div class="col-form-label col-md-3">Person</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Person</div>
 
                 <div class="col">
-                  <input type="text" name="people_name" placeholder="person" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text"><i class="bi bi-person"></i></div>
+                    </div>
+
+                    <input type="text" name="people_name" placeholder="person" class="form-control">
+
+                  </div>
 
                 </div>
 
@@ -118,20 +125,34 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- address_street -->
-                <div class="col-form-label col-md-3">Property</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Property</div>
 
                 <div class="col">
-                  <input type="text" name="address_street" placeholder="property" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text"><i class="bi bi-house-door"></i></div>
+                    </div>
+
+                    <input type="text" name="address_street" placeholder="property" class="form-control">
+
+                  </div>
 
                 </div>
 
               </div>
 
               <div class="form-row mb-2"><!-- location -->
-                <div class="col-form-label col-md-3">Location</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Location</div>
 
                 <div class="col">
-                  <input type="text" name="location" placeholder="location" class="form-control">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="bi bi-geo"></i></div>
+                    </div>
+
+                    <input type="text" name="location" placeholder="location" class="form-control">
+
+                  </div>
 
                 </div>
 
@@ -313,6 +334,7 @@ use theme;  ?>
         </div>
 
         <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary d-none mr-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">close</button>
           <button type="submit" class="btn btn-primary">Save</button>
 
@@ -460,6 +482,13 @@ use theme;  ?>
 
     });
 
+    $('#<?= $_btnInfo ?>').on( 'click', function( e) {
+      e.stopPropagation();
+
+      $('#<?= $_form ?>').trigger('check-invite');
+
+    });
+
     $('#<?= $_form ?>')
     .on( 'activate-invite', function(e) {
       let _form = $(this);
@@ -492,12 +521,33 @@ use theme;  ?>
       }
 
     })
+    .on( 'check-invite', function(e) {
+      let _form = $(this);
+      let _data = _form.serializeFormJSON();
+      let _time = timeHandler(_data.start);
+      _time.recon();
+
+      let _date = _.dayjs(_data.date).hour( _time.zHours()).minute( _time.Minutes);
+      let format = 'dddd MMM D [at] ha';
+
+      console.log( _date, _data.date, _time.zHours(), _time.Minutes);
+
+      _.ask({
+        title : 'Query',
+        text : _data.date + ' ' + _data.start + '<br>' + _date.format(format)
+
+      });
+
+    })
     .on( 'send-invite', function(e) {
       let _form = $(this);
       let _data = _form.serializeFormJSON();
+      let _time = timeHandler(_data.start);
+      _time.recon();
 
-      let _date = _.dayjs( _data.date + ' ' + _data.start);
-      let format = 'dddd MMM D at ha';
+      let _date = _.dayjs(_data.date).hour( _time.zHours()).minute( _time.Minutes);
+
+      let format = 'dddd MMM D [at] ha';
 
       if ( _date.isValid() && _date.unix() > 0) {
         format = 'dddd MMM D';  // it's a valid date
