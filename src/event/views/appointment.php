@@ -98,7 +98,7 @@ use theme;  ?>
                 <div class="col-form-label col-md-3">Person</div>
 
                 <div class="col">
-                  <input type="text" name="people_name" class="form-control">
+                  <input type="text" name="people_name" placeholder="person" class="form-control">
 
                 </div>
 
@@ -121,7 +121,7 @@ use theme;  ?>
                 <div class="col-form-label col-md-3">Property</div>
 
                 <div class="col">
-                  <input type="text" name="address_street" class="form-control">
+                  <input type="text" name="address_street" placeholder="property" class="form-control">
 
                 </div>
 
@@ -131,7 +131,7 @@ use theme;  ?>
                 <div class="col-form-label col-md-3">Location</div>
 
                 <div class="col">
-                  <input type="text" name="location" class="form-control">
+                  <input type="text" name="location" placeholder="location" class="form-control">
 
                 </div>
 
@@ -605,11 +605,7 @@ use theme;  ?>
       return false;
     });
 
-    $('#<?= $_modal ?>')
-    .on( 'shown.bs.modal', e => {
-      $('input[name="date"]', '#<?= $_form ?>').focus();
-
-    })
+    $('#<?= $_modal ?>').on( 'shown.bs.modal', e => $('input[name="date"]', '#<?= $_form ?>').focus())
 
     $(document).ready( () => {
 
@@ -629,11 +625,11 @@ use theme;  ?>
             // console.table( o);
 
             $('input[name="property_id"]', '#<?= $_form ?>').val( o.id);
-            loc.attr( 'placeholder', o.street);
 
           },
 
         })
+        .on( 'change', function(e) { $(this).trigger('update-placeholder'); })
         .on( 'keyup', function(e) { $(this).trigger('update-placeholder'); })
         .on( 'update-placeholder', function(e) {
           let _me = $(this);
