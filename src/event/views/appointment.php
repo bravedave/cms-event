@@ -334,7 +334,7 @@ use theme;  ?>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary mr-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
+          <button type="button" class="btn btn-outline-secondary d-none mr-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">close</button>
           <button type="submit" class="btn btn-primary">Save</button>
 
