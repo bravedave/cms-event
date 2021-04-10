@@ -524,8 +524,13 @@ use theme;  ?>
     .on( 'check-invite', function(e) {
       let _form = $(this);
       let _data = _form.serializeFormJSON();
-      let _date = _.dayjs( _data.date + ' ' + _data.start);
+      let _time = timeHandler(_data.start);
+      _time.recon();
+
+      let _date = _.dayjs(_data.date).hour( _time.zHours()).minute( _time.Minutes);
       let format = 'dddd MMM D [at] ha';
+
+      console.log( _date, _data.date, _time.zHours(), _time.Minutes);
 
       _.ask({
         title : 'Query',
@@ -537,8 +542,11 @@ use theme;  ?>
     .on( 'send-invite', function(e) {
       let _form = $(this);
       let _data = _form.serializeFormJSON();
+      let _time = timeHandler(_data.start);
+      _time.recon();
 
-      let _date = _.dayjs( _data.date + ' ' + _data.start);
+      let _date = _.dayjs(_data.date).hour( _time.zHours()).minute( _time.Minutes);
+
       let format = 'dddd MMM D [at] ha';
 
       if ( _date.isValid() && _date.unix() > 0) {
