@@ -72,23 +72,30 @@ use theme;  ?>
               </div>
 
               <div class="form-row mb-2"><!-- activity -->
-                <div class="col-form-label col-2 col-md-3 text-truncate">Activity</div>
+                <div class="col-form-label d-none d-md-block col-md-3">Activity</div>
 
                 <div class="col">
-                  <select name="event" class="form-control" required>
-                    <option></option>
-                    <?php foreach ($this->data->events as $e) {
-                      printf(
-                        '<option value="%s" data-multiday="%s">%s</option>',
-                        $e->event,
-                        $e->multi_day,
-                        $e->event
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text"><i class="bi bi-journal-bookmark"></i></div>
+                    </div>
 
-                      );
+                    <select name="event" class="form-control" required>
+                      <option></option>
+                      <?php foreach ($this->data->events as $e) {
+                        printf(
+                          '<option value="%s" data-multiday="%s">%s</option>',
+                          $e->event,
+                          $e->multi_day,
+                          $e->event
 
-                    } ?>
+                        );
 
-                  </select>
+                      } ?>
+
+                    </select>
+
+                  </div>
 
                 </div>
 
