@@ -13,6 +13,8 @@
       .replace( /@.*$/, '')
       .replace( /^property-diary-/, '');
 
+      // console.log( 'click', id);
+
     if ( Number( id) > 0) {
       _.post({
         url : _.url('event'),
