@@ -457,7 +457,7 @@ use theme;  ?>
 
       }
       else {
-        $('#<?= $_accordion ?>_people_button').html( 'select attendees');
+        $('#<?= $_accordion ?>_people_button').html( 'attendees');
 
       }
 
@@ -473,7 +473,7 @@ use theme;  ?>
 
     })
     .on( 'reconcile', function(e) {
-      let s = 'select target';
+      let s = 'Team Member';
       let tu = $('input[name="target_user"]:checked', this);
       if (tu.length > 0) {
         let _data = tu.data();
