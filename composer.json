@@ -10,6 +10,10 @@
     }
   ],
   "repositories": {
+    "bravedave-dvc-mail": {
+      "type": "git",
+      "url": "https://github.com/bravedave/dvc-mail"
+    },
     "bravedave-dvc": {
       "type": "git",
       "url": "https://github.com/bravedave/dvc"
@@ -22,7 +26,8 @@
   },
   "require": {
     "bravedave/green": "*",
-    "bravedave/dvc-cal": "*"
+    "bravedave/dvc-cal": "*",
+    "bravedave/dvc-mail": "*"
   },
   "autoload": {
     "psr-4": {

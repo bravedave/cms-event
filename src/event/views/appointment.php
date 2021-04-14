@@ -243,6 +243,82 @@ use theme;  ?>
 
             </div>
 
+            <div class="card"><!-- notify -->
+              <div id="<?= $_accordion ?>_notify_heading">
+                <h2 class="mb-0">
+                  <button class="btn btn-light btn-block text-left collapsed" type="button"
+                    id="<?= $_accordion ?>_notify_button"
+                    data-toggle="collapse"
+                    data-target="#<?= $_accordion ?>_notify"
+                    aria-expanded="false"
+                    aria-controls="<?= $_accordion ?>_notify"></button>
+
+                </h2>
+
+              </div>
+
+              <div id="<?= $_accordion ?>_notify" class="collapse" aria-labelledby="<?= $_accordion ?>_notify_heading" data-parent="#<?= $_accordion ?>">
+                <div class="card-body">
+                  <div class="form-row mb-2">
+                    <div class="col">
+                      <?php
+                      $col2 = false;
+                      $i = 0;
+
+                      foreach ($this->data->users as $user) {
+                        if ( !$col2 && $i++ >= count($this->data->users)/2) {
+                          print '</div><div class="col">';
+                          $col2 = true;
+
+                        }
+
+                        ?>
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" name="notify_users[]"
+                            <?php // if ( currentUser::id() == $user->id) print 'checked'; ?>
+                            value="<?= $user->id ?>"
+                            data-name="<?= $user->name ?>"
+                            id="<?= $uid = strings::rand() ?>">
+
+                          <label class="form-check-label" for="<?= $uid ?>">
+                            <?= $user->name ?>
+
+                          </label>
+
+                        </div>
+
+                      <?php
+                      } ?>
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-row mb-2">
+                    <div class="col">
+                      <textarea class="form-control" name="notify_message" rows="3" placeholder="notify message ..."></textarea>
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-row">
+                    <div class="col text-right">
+                      <button type="button" class="btn btn-outline-primary"
+                        data-toggle="collapse" data-target="#<?= $_accordion ?>_appointment"
+                        aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment"
+                      >done</button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
             <div class="card"><!-- target_user -->
               <div id="<?= $_accordion ?>_target_user_heading">
                 <h2 class="mb-0">
@@ -426,7 +502,7 @@ use theme;  ?>
 
     $('#<?= $_accordion ?>')
     .on( 'check-visibility', e => {
-      if (!( $('#<?= $_accordion ?>_appointment').is(':visible') || $('#<?= $_accordion ?>_people').is(':visible') || $('#<?= $_accordion ?>_target_user').is(':visible') )) {
+      if (!( $('#<?= $_accordion ?>_appointment').is(':visible') || $('#<?= $_accordion ?>_people').is(':visible') || $('#<?= $_accordion ?>_notify').is(':visible') || $('#<?= $_accordion ?>_target_user').is(':visible') )) {
         $('#<?= $_accordion ?>_appointment').collapse( 'show');
 
       }
@@ -458,6 +534,36 @@ use theme;  ?>
       }
       else {
         $('#<?= $_accordion ?>_people_button').html( 'attendees');
+
+      }
+
+    });
+
+    $('#<?= $_accordion ?>_notify')
+    .on( 'hide.bs.collapse', function(e) {
+      $(this).trigger( 'reconcile');
+
+    })
+    .on( 'hidden.bs.collapse', function(e) {
+      $('#<?= $_accordion ?>').trigger( 'check-visibility');
+
+    })
+    .on( 'reconcile', function(e) {
+      let a = []
+      $('input[name="notify_users[]"]:checked', this).each( (i, sel) => {
+        let _sel = $(sel);
+        let _data = _sel.data();
+
+        a.push( _data.name);
+
+      });
+
+      if ( a.length > 0) {
+        $('#<?= $_accordion ?>_notify_button').html( '<span class="text-monospace">notify.</span>' + a.join(', '));
+
+      }
+      else {
+        $('#<?= $_accordion ?>_notify_button').html( 'notify');
 
       }
 
@@ -715,7 +821,7 @@ use theme;  ?>
 
       });
 
-      $('#<?= $_accordion ?>_people, #<?= $_accordion ?>_target_user').trigger( 'reconcile');
+      $('#<?= $_accordion ?>_people, #<?= $_accordion ?>_notify, #<?= $_accordion ?>_target_user').trigger( 'reconcile');
 
     });
 

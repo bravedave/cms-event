@@ -50,4 +50,22 @@ class home extends dvc\cal\controller {
 
   }
 
+  function js( string $lib = '') {
+    if ( 'event' == (string)$lib) {
+      dvc\jslib::viewjs([
+        'debug' => false,
+        'libName' => 'cms-event',
+        'jsFiles' => sprintf( '%s/app/js/*.js', $this->rootPath ),
+        'libFile' => config::tempdir()  . '_event_tmp.js'
+
+      ]);
+
+    }
+    else {
+      parent::js( $lib);
+
+    }
+
+  }
+
 }

@@ -28,14 +28,55 @@
 
     <div class="collapse navbar-collapse" id="<?= $_uid ?>">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="<?= strings::url() ?>">
+            <i class="bi bi-house"></i>
+            <span class="sr-only">home</span>
+
+          </a>
+
+        </li>
+
         <!-- start : the appointment can be implemented -->
         <li class="nav-item"><a class="nav-link" title="appointment" href="#" id="<?= $_uid = strings::rand() ?>">New Event</a></li>
         <script>( _ => $('#<?= $_uid ?>').on( 'click', e => _.get.modal( _.url( 'event/appointment')))) (_brayworth_);</script>
         <!-- end : the appointment can be implemented -->
 
+        <!-- start : webmail -->
+        <li class="nav-item">
+          <a class="nav-link" title="webmail" href="<?= strings::url( 'mail') ?>">
+            <i class="bi bi-inbox"></i>
+          </a>
+
+        </li>
+        <!-- end : webmail -->
+
+        <!-- start : email -->
+        <li class="nav-item"><a class="nav-link" title="email" href="#" id="<?= $_uid = strings::rand() ?>"><i class="bi bi-envelope"></i></a></li>
+        <script>
+        ( _ => $('#<?= $_uid ?>').on( 'click', function( e) {
+          let btn = $(this)
+          btn.prop('disabled', true);
+
+          _.get.modal( _.url('mail/compose'))
+          .then( modal => {
+            modal.on( 'email-active', function(e) {
+              // this is the modal ...
+              console.log( 'email is active event ...');
+
+            });
+
+            btn.prop('disabled', false);
+
+          });
+
+        })) (_brayworth_);
+        </script>
+        <!-- end : email -->
+
         <li class="nav-item dropdown">
           <a class="nav-link pb-0 dropdown-toggle" href="#" id="navbarDropdown" role="button" aria-label="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <?= dvc\icon::get( dvc\icon::gear ) ?>
+            <i class="bi bi-gear"></i>
 
           </a>
 
@@ -59,17 +100,8 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="<?= strings::url() ?>">
-            <?= dvc\icon::get( dvc\icon::house ) ?>
-            <span class="sr-only">home</span>
-
-          </a>
-
-        </li>
-
-        <li class="nav-item">
           <a class="nav-link" href="https://github.com/bravedave/">
-            <?= dvc\icon::get( dvc\icon::github ) ?>
+            <i class="bi bi-github"></i>
             <span class="sr-only">github</span>
 
           </a>

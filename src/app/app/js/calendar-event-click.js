@@ -46,11 +46,15 @@
               $('input[name="property_id"]', form).val(d.data.property_id);
               $('input[name="address_street"]', form).val(d.data.address_street);
               $('select[name="event"]', form).val(d.data.event_name);
-              $('input[name="location"]', form).val(d.data.location);
+              if (d.data.location != d.data.address_street) {
+                $('input[name="location"]', form).val(d.data.location);
+
+              }
+              $('textarea[name="notes"]', form).val(d.data.comments);
 
               $('input[name="attendants\[\]"]', modal).prop( 'checked', false);
               if ( !!d.data.attendants) {
-                attendants = JSON.parse( d.data.attendants);
+                let attendants = JSON.parse( d.data.attendants);
                 $.each( attendants, ( i, attendant) => {
                   // console.log( attendant);
                   $('input[name="attendants\[\]"][value="' + attendant + '"]', modal).prop( 'checked', true);
@@ -58,6 +62,16 @@
                 });
 
               }
+
+              /**--- ---[notify users restore]--- ---*/
+              $('input[name="notify_users\[\]"]', modal).prop( 'checked', false);
+              if (!!d.data.notify_users) {
+                let notify_users = JSON.parse(d.data.notify_users);
+                $.each(notify_users, (i, user) => $('input[name="notify_users\[\]"][value="' + user + '"]', modal).prop( 'checked', true));
+
+              }
+              $('textarea[name="notify_message"]', form).val(d.data.notify_message);
+              /**--- ---[end: notify users restore]--- ---*/
 
               $('input[name="target_user"][value="' + d.data.target_user + '"]', modal).prop('checked', true);
 
