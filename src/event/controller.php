@@ -188,7 +188,7 @@ class controller extends \Controller {
 
           $dao = new dao\users;
           if ( $uDto = $dao->getByID( $uid)) {
-            $start = date( 'l M j \a\t ga', strtotime( $a['date_start']));
+            $start = date( 'D d/m - ga', strtotime( $a['date_start']));
 
             $notes = [
               '<span style="font-family: monospace;">',
