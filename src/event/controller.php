@@ -184,7 +184,7 @@ class controller extends \Controller {
 
         $a['subject'] = implode(' - ', $_subject);
 
-        $notifyUser = function( $prefix, $uid) use ($a) {
+        $notifyUser = function( $suffix, $uid) use ($a) {
 
           $dao = new dao\users;
           if ( $uDto = $dao->getByID( $uid)) {
@@ -194,32 +194,45 @@ class controller extends \Controller {
               '<span style="font-family: monospace;">',
               '<strong>Appointment Details</strong>',
               '',
-              'Date/time..: ' . $start,
-              'Activity...: ' . $a['event_name']
+              'Date/time ..: ' . $start,
+              'Activity ...: ' . $a['event_name']
 
             ];
 
-            if ( $person = $this->getPost('people_name')) $notes[] = 'Person.....: ' . $person;
-            if ( $a['location']) $notes[] = 'Location...: ' . $a['location'];
-            if ( $address = $this->getPost('address_street')) $notes[] = 'Property : ' . $address;
-            if ( $a['comments']) $notes[] = sprintf( 'Notes......:<blockquote>%s</blockquote>', strings::text2html( $a['comments']));
+            if ( $person = $this->getPost('people_name')) $notes[] = 'Person .....: ' . $person;
+            if ( $a['location']) $notes[] = 'Location ...: ' . $a['location'];
+            if ( $address = $this->getPost('address_street')) $notes[] = 'Property ...: ' . $address;
+            if ( $a['comments']) $notes[] = sprintf( 'Notes ......:<blockquote style="margin-left: 1em;">%s</blockquote>', strings::text2html( $a['comments']));
             if ( $a['notify_message']) {
               $notes[] = '';
-              $notes[] = sprintf( 'Instructions:<blockquote>%s</blockquote>', strings::text2html( $a['notify_message']));
+              $notes[] = sprintf( 'Instructions:<blockquote style="margin-left: 1em;">%s</blockquote>', strings::text2html( $a['notify_message']));
 
             }
 
-            $signoff = json_encode( currentUser::user()->name);
+            $signoff = currentUser::user()->name;
             if ( isset( currentUser::user()->email_signoff) && currentUser::user()->email_signoff)
-              $signoff = json_encode( currentUser::user()->email_signoff );
+              $signoff = currentUser::user()->email_signoff;
 
             $notes[] = '';
             $notes[] = $signoff;
             $notes[] = '</span>';
 
+            $msgHtml = implode( '<br>', $notes);
+
+            if ( class_exists('emailTemplate')) {
+              /**
+               * wrap the message in our customized templates
+               **/
+              $eBody = new \emailTemplate;
+              $eBody->BuildContactInfoFromUser();
+              $eBody->messageSpace = $msgHtml;
+              $msgHtml = $eBody->renderInline();
+
+            }
+
             $mail = currentUser::mailer();
-            $mail->Subject = sprintf( '%s Appt. %s - %s', $prefix, $a['event_name'], $start);
-            $mail->msgHTML( implode( '<br>', $notes));
+            $mail->Subject = sprintf( 'Appt.%s %s - %s', $suffix, $a['event_name'], $start);
+            $mail->msgHTML( $msgHtml);
             $mail->AddAddress( $uDto->email, $uDto->name);
             if ( !$mail->send()) {
               \sys::logger( sprintf('<failed to send notification> <%s> %s', $mail->ErrorInfo, __METHOD__));
@@ -232,7 +245,6 @@ class controller extends \Controller {
 
           }
 
-
         };
 
         $dao = new dao\property_diary;
@@ -241,7 +253,7 @@ class controller extends \Controller {
           Json::ack( $action);
 
           if ( $notify_users) {
-            foreach ($notify_users as $user) $notifyUser( 'Review Updated', $user);
+            foreach ($notify_users as $user) $notifyUser( '(u)', $user);
 
           }
 
@@ -280,7 +292,7 @@ class controller extends \Controller {
           }
 
           if ( $notify_users) {
-            foreach ($notify_users as $user) $notifyUser( 'Review New', $user);
+            foreach ($notify_users as $user) $notifyUser( '', $user);
 
           }
 
