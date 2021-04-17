@@ -56,18 +56,6 @@ class controller extends \Controller {
     $debug = false;
     $ret = [];
 
-    // $start = $this->getPost('start');
-    // if ( !$start || strtotime( $start) < 1) {
-    //   $start = date( 'Y-m-d', strtotime('-2 months'));
-
-    // }
-
-    // $end = $this->getPost('end');
-    // if ( !$end || strtotime( $end) < 1) {
-    //   $end = date( 'Y-m-d', strtotime('+2 months'));
-
-    // }
-
     $autotime = '07:00:00';
 
 		$dao = new dao\property_diary;

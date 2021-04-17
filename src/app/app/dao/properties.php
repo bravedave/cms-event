@@ -8,8 +8,8 @@
  *
 */
 
-namespace cms\event\dao;
+namespace dao;
 
-use dao;
+use green;
 
-class people extends dao\people {}
+class properties extends green\properties\dao\properties {}

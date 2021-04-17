@@ -10,6 +10,6 @@
 
 namespace cms\event\dao;
 
-use green;
+use dao;
 
-class properties extends green\properties\dao\properties {}
+class properties extends dao\properties {}
