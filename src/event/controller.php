@@ -406,7 +406,7 @@ class controller extends \Controller {
       $fields = 'event_name, appointment_inspection, comment_not_required, exclude_for_user';
 
       $_pref = [];
-      if ( $preferedOrder = $this->getPost('order')) {
+      if ( $preferedOrder = $this->getPost('order', currentUser::diaryEventOrder())) {
         $prefs = explode(',', $preferedOrder);
 
         $pri = 0;

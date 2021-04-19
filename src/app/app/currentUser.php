@@ -26,6 +26,11 @@ abstract class currentUser extends dvc\currentUser {
 
 	}
 
+	static function diaryEventOrder() {
+		return '';
+
+	}
+
 	static public function mailer() {
 		/*
 		 *	Return the appropriate PHP-Mailer object
