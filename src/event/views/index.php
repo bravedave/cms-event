@@ -54,6 +54,7 @@ if ( currentUser::isAdmin()) {	?>
 <?php if ( currentUser::diaryEventOrder()) {	?>
 
 <div class="alert alert-warning">
+	<h4 class="alert-heading">Diary Event Order</h4>
 	note: the order displayed here is affected by your diary-event-order which is : <strong><?= currentUser::diaryEventOrder() ?></strong>
 </div>
 
