@@ -56,7 +56,38 @@ class diary_events extends _dao {
 
 	}
 
-	public function getAll( $fields = '*', $order = 'ORDER BY `order` ASC, `event_name` ASC' ) {
+	public function getAll( $fields = '*', $order = null ) {
+    if ( !$order) {
+      $_pref = [];
+      if ( $preferedOrder = currentUser::diaryEventOrder()) {
+        $prefs = explode(',', $preferedOrder);
+
+        $pri = 0;
+        $_cal = [];
+        foreach ($prefs as $pref) {
+          $pref = trim( $pref);
+          if ( isset( config::calendars[$pref])) {
+            $_cal[] = sprintf( 'WHEN %d THEN %d', config::calendars[$pref], $pri++);
+
+          }
+
+        }
+
+        if ( $_cal) {
+          $_cal[] = sprintf( 'ELSE %d', $pri++);
+          $_pref[] = sprintf( 'CASE `calendar` %s END ASC', implode( ' ', $_cal));
+
+        }
+
+      }
+
+      $_pref[] = '`order` ASC';
+      $_pref[] = '`event_name` ASC';
+
+      $order = sprintf( 'ORDER BY %s', implode( ',', $_pref));
+
+    }
+
 		return ( parent::getAll( $fields, $order));
 
 	}
