@@ -30,6 +30,9 @@
     "bravedave/dvc-cal": "*",
     "bravedave/dvc-mail": "*"
   },
+  "require-dev": {
+    "matthiasmullie/scrapbook": "*"
+  },
   "autoload": {
     "psr-4": {
       "cms\\event\\": "src/event/"

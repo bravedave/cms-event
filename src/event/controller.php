@@ -380,8 +380,59 @@ class controller extends \Controller {
 
     }
     elseif ( 'getevents' == $action) {
+      /*
+      ( _ => _.post({
+        url : _.url('event'),
+        data : {
+          action : 'getevents',
+          order : 'Sales, Rentals'
+        },
+
+      }).then( d => {
+        if ( 'ack' == d.response) {
+          console.table( d.data);
+
+        }
+        else {
+          _.growl( d);
+
+        }
+
+      }))(_brayworth_);
+      */
+
+      $res = false;
       $dao = new dao\diary_events;
-      if ( $res = $dao->getAll( 'event_name, appointment_inspection, comment_not_required, exclude_for_user')) {
+      $fields = 'event_name, appointment_inspection, comment_not_required, exclude_for_user';
+
+      $_pref = [];
+      if ( $preferedOrder = $this->getPost('order')) {
+        $prefs = explode(',', $preferedOrder);
+
+        $pri = 0;
+        $_cal = [];
+        foreach ($prefs as $pref) {
+          $pref = trim( $pref);
+          if ( isset( config::calendars[$pref])) {
+            $_cal[] = sprintf( 'WHEN %d THEN %d', config::calendars[$pref], $pri++);
+
+          }
+
+        }
+
+        if ( $_cal) {
+          $_cal[] = sprintf( 'ELSE %d', $pri++);
+          $_pref[] = sprintf( 'CASE `calendar` %s END ASC', implode( ' ', $_cal));
+
+        }
+
+      }
+
+      $_pref[] = '`order` ASC';
+      $_pref[] = '`event_name` ASC';
+
+      // $dao->log = true;
+      if ( $res = $dao->getAll( $fields, sprintf( 'ORDER BY %s', implode( ',', $_pref)))) {
         $a = [];
         foreach( $res->dtoSet() as $d) {
           if ( $hidden = dao\diary_events::isHidden( $d)) continue;
