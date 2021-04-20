@@ -11,7 +11,7 @@
 namespace dao;
 
 $dbc = \sys::dbCheck( 'property_diary' );
-$dbc->defineField( 'notify_users', 'varchar');
+$dbc->defineField( 'notify_users', 'text');
 $dbc->defineField( 'notify_message', 'text');
 $dbc->defineField( 'target_user', 'int');
 $dbc->check();
