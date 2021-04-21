@@ -143,6 +143,7 @@ class controller extends \Controller {
           'attendants' => '',
           'notify_users' => '',
           'notify_message' => $this->getPost( 'notify_message'),
+          'notify_reminder' => $this->getPost( 'notify_reminder'),
 
         ];
 
@@ -379,26 +380,35 @@ class controller extends \Controller {
       } else { parent::postHandler(); }
 
     }
+    elseif ( 'get-reminders' == $action) {
+      /*
+      ( _ => _.post({
+          url : _.url('event'),
+          data : {
+            action : 'get-reminders'
+          },
+
+        }).then( d => 'ack' == d.response ? console.log( d.data) : _.growl( d))
+
+      )(_brayworth_);
+      */
+      $dao = new dao\property_diary;
+      Json::ack( $action)
+        ->add('data', $dao->getReminders( currentUser::id()));
+
+    }
     elseif ( 'getevents' == $action) {
       /*
       ( _ => _.post({
-        url : _.url('event'),
-        data : {
-          action : 'getevents',
-          order : 'Sales, Rentals'
-        },
+          url : _.url('event'),
+          data : {
+            action : 'getevents',
+            order : 'Sales, Rentals'
+          },
 
-      }).then( d => {
-        if ( 'ack' == d.response) {
-          console.table( d.data);
+        }).then( d => 'ack' == d.response ? console.table( d.data) : _.growl( d))
 
-        }
-        else {
-          _.growl( d);
-
-        }
-
-      }))(_brayworth_);
+      )(_brayworth_);
       */
 
       $res = false;
@@ -451,6 +461,16 @@ class controller extends \Controller {
         } else { \Json::nak( $action); }
 
       } else { \Json::nak( $action); }
+
+    }
+    elseif ( 'reminder-dismiss' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\property_diary;
+        $dao->UpdateByID(['notify_reminder' => config::notify_reminder_dismissed], $id);
+
+      }
+
+      \Json::ack( $action);
 
     }
     elseif ( 'property-diary-get-by-id' == $action) {

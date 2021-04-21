@@ -169,4 +169,41 @@ class property_diary extends green\property_diary\dao\property_diary {
 
   }
 
+  public function getReminders( int $id) : array {
+    $fields = [
+      '`pd`.`id`',
+      '`pd`.`date_start`',
+      '`pd`.`event`',
+      '`pd`.`subject`',
+      '`pd`.`location`',
+      '`pd`.`target_user`',
+
+    ];
+
+    $time = time();
+
+    $sql = sprintf(
+      'SELECT %s
+      FROM `property_diary` pd
+      WHERE
+        `notify_reminder` = %d
+        AND `date_start` BETWEEN "%s" AND "%s"
+      ',
+      implode( ',', $fields),
+      config::notify_reminder,
+      date('Y-m-d H:i:s', $time - 900),
+      date('Y-m-d H:i:s', $time + 1800)
+
+    );
+
+    // \sys::logSQL( sprintf('<%s> %s', $sql, __METHOD__));
+    if ( $res = $this->Result( $sql)) {
+      return $res->dtoSet();
+
+    }
+
+    return [];
+
+  }
+
 }

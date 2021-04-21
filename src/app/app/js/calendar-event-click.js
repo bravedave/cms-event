@@ -77,6 +77,11 @@
 
               $('input[name="target_user"][value="' + d.data.target_user + '"]', modal).prop('checked', true);
 
+              if ( 1 == d.data.notify_reminder) {
+                $('input[name="notify_reminder"]', modal).prop('checked', true);
+
+              }
+
               modal
               .off('shown.bs.modal')
               .on('shown.bs.modal', e => $('input[name="start"]', modal).focus());
@@ -85,7 +90,7 @@
 
             });
 
-          console.table( d.data);
+          // console.table( d.data);
 
         }
         else {

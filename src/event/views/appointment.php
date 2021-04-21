@@ -379,9 +379,19 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row mb-2 d-none" id="<?= $_uidNotifyUser = strings::rand() ?>">
+                  <div class="form-row mb-2">
                     <div class="col">
                       <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="notify_reminder" value="1" id="<?= $uid = strings::rand() ?>">
+
+                        <label class="form-check-label" for="<?= $uid ?>">
+                          Show Reminder
+
+                        </label>
+
+                      </div>
+
+                      <div class="form-check d-none" id="<?= $_uidNotifyUser = strings::rand() ?>">
                         <input type="checkbox" class="form-check-input" name="notify_target_user" value="yes" id="<?= $uid = strings::rand() ?>">
 
                         <label class="form-check-label" for="<?= $uid ?>">
@@ -581,10 +591,15 @@ use theme;  ?>
     .on( 'reconcile', function(e) {
       let s = 'Team Member';
       let tu = $('input[name="target_user"]:checked', this);
+      let nr = $('input[name="notify_reminder"]:checked', this);
       if (tu.length > 0) {
         let _data = tu.data();
         s = '<span class="text-monospace">tm..</span>' + _data.name;
 
+      }
+
+      if ( nr.length > 0) {
+        s += ' (reminder)'
       }
 
       $('#<?= $_accordion ?>_target_user_button').html( s);

@@ -14,7 +14,7 @@ use Json;
 
 class config extends \config {
   const label = 'CMS Event';
-	const cms_event_db_version = 1.4;
+	const cms_event_db_version = 1.5;
 
   const calendar_global = 1;
 
@@ -27,6 +27,9 @@ class config extends \config {
     'Rentals' => self::calendar_rental,
 
   ];
+
+	const notify_reminder = 1;
+	const notify_reminder_dismissed = 2;
 
 	const system_events = [
 		'Appointment',
