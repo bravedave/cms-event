@@ -818,7 +818,11 @@ use theme;  ?>
       return false;
     });
 
-    $('#<?= $_modal ?>').on( 'shown.bs.modal', e => $('input[name="date"]', '#<?= $_form ?>').focus())
+    $('#<?= $_modal ?>').on( 'shown.bs.modal', e => {
+      $('input[name="date"]', '#<?= $_form ?>').focus();
+      $(document).trigger('shown.cms-event.appointment', '<?= $_modal ?>');
+
+    });
 
     $(document).ready( () => {
 
