@@ -820,7 +820,7 @@ use theme;  ?>
 
     $('#<?= $_modal ?>').on( 'shown.bs.modal', e => {
       $('input[name="date"]', '#<?= $_form ?>').focus();
-      $(document).trigger('shown.cms-event.appointment', '<?= $_modal ?>');
+      $(document).trigger('shown.cms-event.appointment', '#<?= $_modal ?>');
 
     });
 
