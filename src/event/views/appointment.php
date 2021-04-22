@@ -226,7 +226,7 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row">
+                  <div class="form-row mb-2">
                     <div class="col-auto">
                       <div class="form-check">
                         <input type="checkbox" class="form-check-input" name="attendants[]" value="0" id="<?= $uid = strings::rand() ?>">
