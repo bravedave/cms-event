@@ -227,6 +227,16 @@ use theme;  ?>
                   </div>
 
                   <div class="form-row">
+                    <div class="col-auto">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="attendants[]" value="0" id="<?= $uid = strings::rand() ?>">
+
+                        <label class="form-check-label" for="<?= $uid ?>">all users</label>
+
+                      </div>
+
+                    </div>
+
                     <div class="col text-right">
                       <button type="button" class="btn btn-outline-primary"
                         data-toggle="collapse" data-target="#<?= $_accordion ?>_appointment"
@@ -510,6 +520,24 @@ use theme;  ?>
 
     });
 
+    $('input[name="attendants\[\]"][value="0"]', '#<?= $_form ?>').on( 'change', function( e) {
+      let _me = $(this);
+
+      if ( _me.prop('checked')) {
+        $('input[name="attendants\[\]"]:not([value="0"])', '#<?= $_form ?>')
+        .prop('checked', true)
+        .prop('disabled', true);
+
+      }
+      else {
+        $('input[name="attendants\[\]"]:not([value="0"])', '#<?= $_form ?>')
+        .prop('checked', false)
+        .prop('disabled', false);
+
+      }
+
+    });
+
     $('#<?= $_accordion ?>')
     .on( 'check-visibility', e => {
       if (!( $('#<?= $_accordion ?>_appointment').is(':visible') || $('#<?= $_accordion ?>_people').is(':visible') || $('#<?= $_accordion ?>_notify').is(':visible') || $('#<?= $_accordion ?>_target_user').is(':visible') )) {
@@ -529,21 +557,28 @@ use theme;  ?>
 
     })
     .on( 'reconcile', function(e) {
-      let a = []
-      $('input[name="attendants[]"]:checked', this).each( (i, sel) => {
-        let _sel = $(sel);
-        let _data = _sel.data();
-
-        a.push( _data.name);
-
-      });
-
-      if ( a.length > 0) {
-        $('#<?= $_accordion ?>_people_button').html( '<span class="text-monospace">att.</span>' + a.join(', '));
+      if ( $('input[name="attendants\[\]"][value="0"]', this).prop('checked')) {
+        $('#<?= $_accordion ?>_people_button').html( '<span class="text-monospace">att.</span>All');
 
       }
       else {
-        $('#<?= $_accordion ?>_people_button').html( 'attendees');
+        let a = []
+        $('input[name="attendants[]"]:checked', this).each( (i, sel) => {
+          let _sel = $(sel);
+          let _data = _sel.data();
+
+          a.push( _data.name);
+
+        });
+
+        if ( a.length > 0) {
+          $('#<?= $_accordion ?>_people_button').html( '<span class="text-monospace">att.</span>' + a.join(', '));
+
+        }
+        else {
+          $('#<?= $_accordion ?>_people_button').html( 'attendees');
+
+        }
 
       }
 

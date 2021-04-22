@@ -63,6 +63,11 @@
 
                 });
 
+                ( el => {
+                  if ( el.length > 0) el.trigger('change');
+
+                })($('input[name="attendants\[\]"][value="0"]:checked', modal));
+
               }
 
               /**--- ---[notify users restore]--- ---*/
