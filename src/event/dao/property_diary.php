@@ -188,11 +188,13 @@ class property_diary extends green\property_diary\dao\property_diary {
       WHERE
         `notify_reminder` = %d
         AND `date_start` BETWEEN "%s" AND "%s"
+        AND `target_user` %d
       ',
       implode( ',', $fields),
       config::notify_reminder,
       date('Y-m-d H:i:s', $time - 900),
-      date('Y-m-d H:i:s', $time + 1800)
+      date('Y-m-d H:i:s', $time + 1800),
+      currentUser::id()
 
     );
 
