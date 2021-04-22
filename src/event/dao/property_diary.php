@@ -11,6 +11,7 @@
 namespace cms\event\dao;
 
 use cms\event\config;
+use currentUser;
 use green;
 
 class property_diary extends green\property_diary\dao\property_diary {
