@@ -605,10 +605,7 @@ class controller extends \Controller {
     }
 
     $dao = new dao\users;
-    if ( $res = $dao->getActive()) {
-      $this->data->users = $res->dtoSet();
-
-    }
+    $this->data->users = $dao->getActive();
 
     $this->load('appointment');
 
