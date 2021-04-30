@@ -62,19 +62,18 @@ class diary_events extends _dao {
       if ( $preferedOrder = currentUser::diaryEventOrder()) {
         $prefs = explode(',', $preferedOrder);
 
-        $pri = 0;
         $_cal = [];
         foreach ($prefs as $pref) {
           $pref = trim( $pref);
           if ( isset( config::calendars[$pref])) {
-            $_cal[] = sprintf( 'WHEN %d THEN %d', config::calendars[$pref], $pri++);
+            $_cal[] = sprintf( 'WHEN %d THEN 0', config::calendars[$pref]);
 
           }
 
         }
 
         if ( $_cal) {
-          $_cal[] = sprintf( 'ELSE %d', $pri++);
+          $_cal[] = 'ELSE 1';
           $_pref[] = sprintf( 'CASE `calendar` %s END ASC', implode( ' ', $_cal));
 
         }
