@@ -55,7 +55,7 @@ if ( currentUser::isAdmin()) {	?>
 
 <div class="alert alert-warning mt-4">
 	<h6 class="alert-heading">Diary Event Order</h6>
-	note: the order displayed here is affected by your diary-event-order which is : <strong><?= currentUser::diaryEventOrder() ?></strong>
+	note: the order displayed here is affected by your diary-event-order which is : <strong><?= currentUser::diaryEventOrder() ?></strong> followed by the rest
 </div>
 
 <?php }	// if ( currentUser::diaryEventOrder())	?>

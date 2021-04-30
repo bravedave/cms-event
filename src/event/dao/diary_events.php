@@ -87,6 +87,43 @@ class diary_events extends _dao {
 
     }
 
+    $order = 'WHERE inactive <> 1 ' . $order;
+
+		return ( parent::getAll( $fields, $order));
+
+	}
+
+	public function getAllwithInactive( $fields = '*', $order = null ) {
+    if ( !$order) {
+      $_pref = [];
+      if ( $preferedOrder = currentUser::diaryEventOrder()) {
+        $prefs = explode(',', $preferedOrder);
+
+        $_cal = [];
+        foreach ($prefs as $pref) {
+          $pref = trim( $pref);
+          if ( isset( config::calendars[$pref])) {
+            $_cal[] = sprintf( 'WHEN %d THEN 0', config::calendars[$pref]);
+
+          }
+
+        }
+
+        if ( $_cal) {
+          $_cal[] = 'ELSE 1';
+          $_pref[] = sprintf( 'CASE `calendar` %s END ASC', implode( ' ', $_cal));
+
+        }
+
+      }
+
+      $_pref[] = '`order` ASC';
+      $_pref[] = '`event_name` ASC';
+
+      $order = sprintf( 'ORDER BY %s', implode( ',', $_pref));
+
+    }
+
 		return ( parent::getAll( $fields, $order));
 
 	}

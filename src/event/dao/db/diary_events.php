@@ -22,6 +22,7 @@ $dbc->defineField( 'order', 'varchar', 3);
 $dbc->defineField( 'icon', 'varchar', 3);
 $dbc->defineField( 'exclude_for_user', 'varchar', 128);
 $dbc->defineField( 'calendar', 'int');
+$dbc->defineField( 'inactive', 'tinyint');
 $dbc->check();
 
 $dao = new \cms\event\dao\diary_events;

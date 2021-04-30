@@ -32,7 +32,7 @@ class controller extends \Controller {
     $dao = new dao\diary_events;
     $this->data = (object)[
       'dto' => false,
-      'dataset' => $dao->getAll()
+      'dataset' => $dao->getAllwithInactive()
 
     ];
 
@@ -438,6 +438,23 @@ class controller extends \Controller {
         Json::nak( $action);
 
       }
+
+    }
+    elseif ( in_array( $action, ['mark-inactive', 'mark-inactive-undo'])) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\diary_events;
+        if ( $dto = $dao->getByID( $id)) {
+
+          $a = [ 'inactive' => 'mark-inactive' == $action ? 1 : 0 ];
+
+          $dao->UpdateByID( $a, $dto->id);
+
+          \Json::ack( $action)
+            ->add( 'inactive', 'mark-inactive' == $action ? 1 : 0);
+
+        } else { \Json::nak( $action); }
+
+      } else { \Json::nak( $action); }
 
     }
     elseif ( 'move' == $action) {

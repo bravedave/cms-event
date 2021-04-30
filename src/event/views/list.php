@@ -14,18 +14,61 @@ use currentUser;
 use strings;	?>
 
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
-
+<style>
+table:not(.show-inactive) tr[data-inactive="yes"] { display : none; }
+</style>
 <div class="table-responsive">
 	<table class="table table-sm" id="<?= $_table = strings::rand() ?>">
     <thead class="small">
-      <td style="width: 70px;" class="text-center">order</td>
-      <td>event</td>
-      <td>event type</td>
-      <td>calendar</td>
-      <td style="width: 70px;" class="text-center">Comment Required</td>
-      <td style="width: 70px;" class="text-center">icon</td>
-      <td style="width: 70px;" class="text-center">prospective<br />seller</td>
-      <td style="width: 70px;" class="text-center">hide</td>
+      <td style="width: 70px;" class="text-center align-bottom">order</td>
+      <td class="align-bottom">event</td>
+      <td class="align-bottom">event type</td>
+      <td class="align-bottom">calendar</td>
+      <!-- td style="width: 70px;" class="text-center align-bottom">comment required</td -->
+      <td style="width: 70px;" class="text-center align-bottom">icon</td>
+      <!-- td style="width: 70px;" class="text-center align-bottom">prospective<br>seller</td -->
+      <td style="width: 70px;" class="text-center align-bottom">
+        inactive
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="<?= $uid = strings::rand() ?>">
+
+          <label class="form-check-label" for="<?= $uid ?>">
+            show
+
+          </label>
+
+        </div>
+        <script>
+        ( _ => {
+          $('#<?= $uid ?>').on( 'change', function(e) {
+            let _me = $(this);
+
+            if ( _me.prop('checked')) {
+              $('#<?= $_table ?>').addClass('show-inactive');
+              sessionStorage.setItem('<?= $this->route ?>-show-inactive', 'yes');
+
+            }
+            else {
+              $('#<?= $_table ?>').removeClass('show-inactive');
+              sessionStorage.removeItem('<?= $this->route ?>-show-inactive');
+
+            }
+
+          });
+
+          if ( 'yes' == sessionStorage.getItem('<?= $this->route ?>-show-inactive')) {
+            $(document).ready(
+              () => $('#<?= $uid ?>').prop( 'checked', true).trigger( 'change')
+
+            );
+
+          }
+
+        }) (_brayworth_);
+        </script>
+
+      </td>
+      <td style="width: 70px;" class="text-center align-bottom">hide from me</td>
 
     </thead>
     <tbody>
@@ -39,6 +82,7 @@ use strings;	?>
         data-id="<?= $dto->id ?>"
         data-system_event="<?= (int)$dto->system_event ?>"
         data-order="<?= $dto->order ?>"
+        data-inactive="<?= $dto->inactive ? 'yes' : 'no' ?>"
         data-hidden="<?= $hidden ? 'yes' : 'no' ?>">
 
         <td class="text-center" order><?= $dto->order ?></td>
@@ -61,10 +105,11 @@ use strings;	?>
             print '&nbsp';
 
           } ?></td>
-        <td class="text-center"><?= ( $dto->comment_not_required ? '' : strings::html_tick ) ?></td>
+        <!-- td class="text-center"><?= ( $dto->comment_not_required ? '' : strings::html_tick ) ?></td -->
         <td class="text-center"><?= $daoDE->IconFor( $dto->event_name) ?></td>
-        <td class="text-center"><?= ( $dto->prospective_seller == 1 ? 'yes' : 'no' ) ?></td>
-        <td class="text-center" HideFromMe><?= ( $hidden ? strings::html_tick : '&nbsp;' ) ?></td>
+        <!-- td class="text-center"><?= ( $dto->prospective_seller == 1 ? 'yes' : 'no' ) ?></td -->
+        <td class="text-center" data-role="inactive"><?= ( $dto->inactive ? strings::html_tick : '&nbsp;' ) ?></td>
+        <td class="text-center" data-role="HideFromMe"><?= ( $hidden ? strings::html_tick : '&nbsp;' ) ?></td>
 
       </tr>
       <?php
@@ -76,8 +121,8 @@ use strings;	?>
 
 </div>
 <script>
-( _ => $(document).ready( () => {
-	$('#<?= $_table ?> > tbody > tr').each( function( i, tr) {
+( _ => {
+	$('#<?= $_table ?> > tbody > tr').each( ( i, tr) => {
 		let _tr = $(tr);
 
 		/*---[ diary event item ]---*/
@@ -107,34 +152,76 @@ use strings;	?>
 
 			}));
 
-			let ctrl = $('<a href="#">hide</a>').on( 'click', function( e ) {
-				e.stopPropagation();e.preventDefault();
+			_context.append( (() => {
+        let ctrl = $('<a href="#">inactive</a>').on( 'click', function( e ) {
+          e.stopPropagation();e.preventDefault();
 
-				_context.close();
+          _context.close();
 
-				_.post({
-					url : _.url('<?= $this->route ?>'),
-					data : {
-						action : 'toggle-hide-event',
-						id : _data.id
+          $('td[data-role="inactive"]', _me).html( '<i class="spinner-grow spinner-grow-sm"></i>');
 
-					}
+          _.post({
+            url : _.url('<?= $this->route ?>'),
+            data : {
+              action : 'yes' == _data.inactive ? 'mark-inactive-undo' : 'mark-inactive',
+              id : _data.id
 
-				}).then( function( d) {
-					_.growl( d);
-					if ( 'ack' == d.response) {
-						_me.data('hidden', d.hidden == '1' ? 'yes' : 'no');
-						$('[HideFromMe]', _me).html( d.hidden == '1' ? '<?= strings::html_tick ?>' : '&nbsp;');
+            }
 
-					}
+          }).then( d => {
+            _.growl( d);
+            if ( 'ack' == d.response) {
+              _me
+              .data('inactive', '1' == d.inactive ? 'yes' : 'no')
+              .attr('data-inactive', '1' == d.inactive ? 'yes' : 'no');
 
-				});
+              $('td[data-role="inactive"]', _me).html( d.inactive == '1' ? '<?= strings::html_tick ?>' : '&nbsp;');
 
-			});
+            }
 
-			if ( 'yes' == _data.hidden) ctrl.prepend('<i class="bi bi-check"></i>');
+          });
 
-			_context.append( ctrl);
+        });
+
+        if ( 'yes' == _data.inactive) ctrl.prepend('<i class="bi bi-check"></i>');
+
+        return ctrl;
+
+      })());
+
+			_context.append( (() => {
+        let ctrl = $('<a href="#">hide from me</a>').on( 'click', function( e ) {
+          e.stopPropagation();e.preventDefault();
+
+          _context.close();
+
+          $('td[data-role="HideFromMe"]', _me).html( '<i class="spinner-grow spinner-grow-sm"></i>');
+
+          _.post({
+            url : _.url('<?= $this->route ?>'),
+            data : {
+              action : 'toggle-hide-event',
+              id : _data.id
+
+            }
+
+          }).then( d => {
+            _.growl( d);
+            if ( 'ack' == d.response) {
+              _me.data('hidden', d.hidden == '1' ? 'yes' : 'no');
+              $('td[data-role="HideFromMe"]', _me).html( d.hidden == '1' ? '<?= strings::html_tick ?>' : '&nbsp;');
+
+            }
+
+          });
+
+        });
+
+        if ( 'yes' == _data.hidden) ctrl.prepend('<i class="bi bi-check"></i>');
+
+        return ctrl;
+
+      })());
 
       if ( '' != _data.order) {
         _context.append( $('<a href="#"><i class="bi bi-caret-up"></i>move up</a>').on( 'click', function( e) {
@@ -291,5 +378,7 @@ use strings;	?>
 
 	});
 
-}))( _brayworth_);
+  $(document).ready( () => {});
+
+})( _brayworth_);
 </script>
