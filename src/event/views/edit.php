@@ -82,11 +82,11 @@ $dto = $this->data->dto;  ?>
 					<div class="form-row mb-2">
 						<div class="offset-3 col">
 							<div class="form-check">
-								<input type="checkbox" class="form-check-input" name="comment_not_required" id="<?= $_uid = strings::rand() ?>" value="1"
-									<?= $dto->comment_not_required ? 'checked' : '' ?>>
+								<input type="checkbox" class="form-check-input" name="multi_day" id="<?= $_uid = strings::rand() ?>" value="1"
+									<?= $dto->multi_day ? 'checked' : '' ?>>
 
 								<label class="form-check-label" for="<?= $_uid ?>">
-									Comment NOT Required
+									Multi Day Event
 
 								</label>
 
@@ -99,11 +99,11 @@ $dto = $this->data->dto;  ?>
 					<div class="form-row mb-2">
 						<div class="offset-3 col">
 							<div class="form-check">
-								<input type="checkbox" class="form-check-input" name="multi_day" id="<?= $_uid = strings::rand() ?>" value="1"
-									<?= $dto->multi_day ? 'checked' : '' ?>>
+								<input type="checkbox" class="form-check-input" name="global" id="<?= $_uid = strings::rand() ?>" value="1"
+									<?= $dto->global ? 'checked' : '' ?>>
 
 								<label class="form-check-label" for="<?= $_uid ?>">
-									Multi Day Event
+									Global (appears on all calendars)
 
 								</label>
 

@@ -24,9 +24,8 @@ table:not(.show-inactive) tr[data-inactive="yes"] { display : none; }
       <td class="align-bottom">event</td>
       <td class="align-bottom">event type</td>
       <td class="align-bottom">calendar</td>
-      <!-- td style="width: 70px;" class="text-center align-bottom">comment required</td -->
       <td style="width: 70px;" class="text-center align-bottom">icon</td>
-      <!-- td style="width: 70px;" class="text-center align-bottom">prospective<br>seller</td -->
+      <td style="width: 70px;" class="text-center align-bottom">global</td>
       <td style="width: 70px;" class="text-center align-bottom">
         inactive
         <div class="form-check">
@@ -105,11 +104,10 @@ table:not(.show-inactive) tr[data-inactive="yes"] { display : none; }
             print '&nbsp';
 
           } ?></td>
-        <!-- td class="text-center"><?= ( $dto->comment_not_required ? '' : strings::html_tick ) ?></td -->
         <td class="text-center"><?= $daoDE->IconFor( $dto->event_name) ?></td>
-        <!-- td class="text-center"><?= ( $dto->prospective_seller == 1 ? 'yes' : 'no' ) ?></td -->
-        <td class="text-center" data-role="inactive"><?= ( $dto->inactive ? strings::html_tick : '&nbsp;' ) ?></td>
-        <td class="text-center" data-role="HideFromMe"><?= ( $hidden ? strings::html_tick : '&nbsp;' ) ?></td>
+        <td class="text-center"><?= $dto->global ? strings::html_tick : '&nbsp;' ?></td>
+        <td class="text-center" data-role="inactive"><?= $dto->inactive ? strings::html_tick : '&nbsp;' ?></td>
+        <td class="text-center" data-role="HideFromMe"><?= $hidden ? strings::html_tick : '&nbsp;' ?></td>
 
       </tr>
       <?php

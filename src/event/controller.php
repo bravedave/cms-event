@@ -312,10 +312,10 @@ class controller extends \Controller {
 				'event_name' => $this->getPost('event_name'),
 				'event_type' => $this->getPost('event_type'),
 				'icon' => $this->getPost('icon'),
-				'comment_not_required' => (int)$this->getPost('comment_not_required'),
 				'multi_day' => (int)$this->getPost('multi_day'),
 				'prospective_seller' => (int)$this->getPost('prospective_seller'),
-				'calendar' => (int)$this->getPost('calendar')
+				'calendar' => (int)$this->getPost('calendar'),
+				'global' => (int)$this->getPost('global')
 
       ];
 
@@ -328,8 +328,7 @@ class controller extends \Controller {
               $a['event_type'],
               $a['icon'],
               $a['prospective_seller'],
-              $a['multi_day'],
-              $a['comment_not_required']
+              $a['multi_day']
 
             );
 
@@ -417,7 +416,7 @@ class controller extends \Controller {
 
       $res = false;
       $dao = new dao\diary_events;
-      $fields = 'event_name, appointment_inspection, comment_not_required, exclude_for_user';
+      $fields = 'event_name, appointment_inspection, exclude_for_user';
 
       // $dao->log = true;
       if ( $res = $dao->getAll( $fields)) {
@@ -427,8 +426,7 @@ class controller extends \Controller {
 
           $a[] = [
             'event' => $d->event_name,
-            'appointment_inspection' => (int)$d->appointment_inspection,
-            'comment_not_required' => (int)$d->comment_not_required
+            'appointment_inspection' => (int)$d->appointment_inspection
 
 					];
 
@@ -610,14 +608,13 @@ class controller extends \Controller {
 
 
     $dao = new dao\diary_events;
-    if ( $res = $dao->getAll( 'event_name, multi_day, comment_not_required, exclude_for_user')) {
+    if ( $res = $dao->getAll( 'event_name, multi_day, exclude_for_user')) {
       foreach( $res->dtoSet() as $d) {
         if ( $hidden = dao\diary_events::isHidden( $d)) continue;
 
         $this->data->events[] = (object)[
           'event' => $d->event_name,
-          'multi_day' => (int)$d->multi_day,
-          'comment_not_required' => (int)$d->comment_not_required
+          'multi_day' => (int)$d->multi_day
 
         ];
 
