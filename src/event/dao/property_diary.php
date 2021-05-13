@@ -39,10 +39,12 @@ class property_diary extends green\property_diary\dao\property_diary {
         '`pd`.`date_start`',
         '`pd`.`date_end`',
         '`pd`.`event`',
+        '`pd`.`event_name`',
         '`pd`.`subject`',
         '`pd`.`location`',
         '`pd`.`attendants`',
         '`pd`.`target_user`',
+        '`de`.`global`',
 
       ];
 
@@ -62,6 +64,8 @@ class property_diary extends green\property_diary\dao\property_diary {
           %s
         FROM
           `property_diary` `pd`
+          LEFT JOIN
+          `diary_events` `de` ON `pd`.`event_name` = `de`.`event_name`
         WHERE
           `pd`.`event` IN ("%s") AND DATE( `pd`.`date`) BETWEEN "%s" AND "%s"',
         implode( ',', $fields),
