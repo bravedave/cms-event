@@ -46,7 +46,11 @@ class controller extends \Controller {
 		$this->render([
 			'title' => $this->title = 'Diary Events',
 			'primary' => 'list',
-			'secondary' => $secondary
+			'secondary' => $secondary,
+      'data' => (object)[
+        'pageUrl' => strings::url( $this->route)
+
+      ]
 
     ]);
 
