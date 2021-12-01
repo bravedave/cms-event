@@ -13,7 +13,7 @@ namespace cms\event;
 use currentUser;
 use dvc;
 use green;
-use Json;
+use dvc\Json;
 use Response;
 use strings;
 
@@ -451,12 +451,12 @@ class controller extends \Controller {
 
           $dao->UpdateByID( $a, $dto->id);
 
-          \Json::ack( $action)
+          Json::ack( $action)
             ->add( 'inactive', 'mark-inactive' == $action ? 1 : 0);
 
-        } else { \Json::nak( $action); }
+        } else { Json::nak( $action); }
 
-      } else { \Json::nak( $action); }
+      } else { Json::nak( $action); }
 
     }
     elseif ( 'move' == $action) {
@@ -474,12 +474,12 @@ class controller extends \Controller {
 
           $dao->UpdateByID( $a, $dto->id);
 
-          \Json::ack( $action)
+          Json::ack( $action)
             ->add( 'order', $order);
 
-        } else { \Json::nak( $action); }
+        } else { Json::nak( $action); }
 
-      } else { \Json::nak( $action); }
+      } else { Json::nak( $action); }
 
     }
     elseif ( 'reminder-dismiss' == $action) {
@@ -489,7 +489,7 @@ class controller extends \Controller {
 
       }
 
-      \Json::ack( $action);
+      Json::ack( $action);
 
     }
     elseif ( 'property-diary-get-by-id' == $action) {
@@ -541,12 +541,12 @@ class controller extends \Controller {
 
           }
 
-          \Json::ack( $action)
+          Json::ack( $action)
             ->add( 'data', $dto);
 
-        } else { \Json::nak( $action); }
+        } else { Json::nak( $action); }
 
-      } else { \Json::nak( $action); }
+      } else { Json::nak( $action); }
 
     }
     elseif ( 'search-people' == $action) {
@@ -576,12 +576,12 @@ class controller extends \Controller {
           $key = array_search( (int)currentUser::id(), $users);
 
           if ( $key === false) {
-            \Json::ack( sprintf( '%s : hide', $action))->add( 'hidden', 1);
+            Json::ack( sprintf( '%s : hide', $action))->add( 'hidden', 1);
             $users[] = (int)currentUser::id();
 
           }
           else {
-            \Json::ack( sprintf( '%s : show', $action))->add( 'hidden', 0);
+            Json::ack( sprintf( '%s : show', $action))->add( 'hidden', 0);
             unset( $users[ $key]);
 
           }
@@ -589,9 +589,9 @@ class controller extends \Controller {
           $a = [ 'exclude_for_user' => implode( ';', $users) . ';'];
           $dao->UpdateByID( $a, $dto->id);
 
-        } else { \Json::nak( $action); }
+        } else { Json::nak( $action); }
 
-      } else { \Json::nak( $action); }
+      } else { Json::nak( $action); }
 
     }
     else { parent::postHandler(); }
