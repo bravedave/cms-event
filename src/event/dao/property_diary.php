@@ -44,6 +44,7 @@ class property_diary extends green\property_diary\dao\property_diary {
         '`pd`.`location`',
         '`pd`.`attendants`',
         '`pd`.`target_user`',
+        '`pd`.`property_id`',
         '`de`.`global`',
 
       ];
