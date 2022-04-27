@@ -10,9 +10,9 @@
 
 namespace cms\event\dao;
 
-use green;
+use dao;
 
-class users extends green\users\dao\users {
+class users extends dao\users {
 	// public function getActive(
 	// 	$fields = 'id, name, email, mobile',
 	// 	$order = 'ORDER BY name'
