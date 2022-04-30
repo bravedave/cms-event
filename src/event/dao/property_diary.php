@@ -12,9 +12,9 @@ namespace cms\event\dao;
 
 use cms\event\config;
 use currentUser;
-use green;
+use dao;
 
-class property_diary extends green\property_diary\dao\property_diary {
+class property_diary extends dao\property_diary {
   public function getCalendar( int $iCal, string $start, string $end) : ?array {
 
     $dao = new diary_events;
