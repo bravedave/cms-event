@@ -14,7 +14,7 @@ use cms\event\config;
 use cms\event\sys;
 use currentUser;
 
-use dao\_dao;
+use dvc\dao\_dao;
 
 class diary_events extends _dao {
   protected $_db_name = 'diary_events';
