@@ -82,6 +82,7 @@ class controller extends \Controller {
         $ret[] = [
           'title' => $dto->subject,
           'location' => $dto->location,
+          'href' => $dto->href,
           'notes' => '',
           'start' => $start->format('c'),
           'end' => $diff < 1801 ? $start->format('c') : $end->format('c'),
