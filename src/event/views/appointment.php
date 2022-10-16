@@ -22,12 +22,12 @@ use theme;  ?>
   <input type="hidden" name="property_id">
   <input type="hidden" name="multiday" value="0">
   <div class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-fullscreen-sm modal-dialog-centered" role="document">
       <div class="modal-content">
 
         <div class="modal-header <?= theme::modalHeader() ?> py-2">
 
-        <h5 class="modal-title" id="<?= $_modal ?>Label"><?= $this->title ?></h5>
+          <h5 class="modal-title" id="<?= $_modal ?>Label"><?= $this->title ?></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
