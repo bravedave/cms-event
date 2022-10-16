@@ -60,7 +60,7 @@ class property_diary extends dao\property_diary {
             LEFT JOIN
           `diary_events` `de` ON `pd`.`event_name` = `de`.`event_name`
         WHERE
-          `pd`.`event` IN ("%s")
+          `pd`.`event` IN (%s)
             AND
           (DATE( `pd`.`date`) BETWEEN %s AND %s
               OR
