@@ -10,13 +10,12 @@
 
 namespace cms\event\dao;
 
-use cms\event\config;
-use cms\event\sys;
+use cms\event\{config, sys};
 use currentUser;
 
-use dvc\dao\_dao;
+use bravedave\dvc\dao;
 
-class diary_events extends _dao {
+class diary_events extends dao {
   protected $_db_name = 'diary_events';
   protected $template = __NAMESPACE__ . '\dto\diary_events';
 
