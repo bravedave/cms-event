@@ -10,9 +10,9 @@
 
 namespace cms\event\dao\dto;
 
-use dao\dto\_dto;
+use bravedave\dvc\dto;
 
-class diary_events extends _dto {
+class diary_events extends dto {
   public $id = 0;
   public $event_name = '';
   public $system_event = 0;
