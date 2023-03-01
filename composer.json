@@ -23,15 +23,14 @@
       "type": "git",
       "url": "https://github.com/bravedave/dvc-cal"
     }
-
   },
   "require": {
     "bravedave/green": "*",
-    "bravedave/dvc-cal": "*",
-    "bravedave/dvc-mail": "*"
+    "bravedave/dvc-cal": "*"
   },
   "require-dev": {
-    "matthiasmullie/scrapbook": "*"
+    "matthiasmullie/scrapbook": "*",
+    "bravedave/dvc-mail": "*"
   },
   "autoload": {
     "psr-4": {
