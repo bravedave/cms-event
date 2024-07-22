@@ -13,7 +13,7 @@ namespace cms\event;
 use cms\{currentUser, strings};
 use bravedave\dvc\{json, logger, Response};
 use cms, green;
-// use dvc;
+use dvc;
 
 class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
