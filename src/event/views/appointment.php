@@ -9,6 +9,7 @@
  * replace:
  * [x] data-dismiss => data-bs-dismiss
  * [x] data-toggle => data-bs-toggle
+ * [x] data-target => data-bs-target
  * [x] data-content => data-bs-content
  * [x] data-title => data-bs-title
  * [x] data-trigger => data-bs-trigger
@@ -198,7 +199,7 @@ use cms\{currentUser, strings, theme};  ?>
               <!-- attendees -->
               <div id="<?= $_accordion ?>_people_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
 
                 </h2>
 
@@ -249,7 +250,7 @@ use cms\{currentUser, strings, theme};  ?>
                     </div>
 
                     <div class="col text-end">
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
@@ -265,7 +266,7 @@ use cms\{currentUser, strings, theme};  ?>
               <!-- notify -->
               <div id="<?= $_accordion ?>_notify_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
 
                 </h2>
 
@@ -314,7 +315,7 @@ use cms\{currentUser, strings, theme};  ?>
 
                   <div class="row g-2">
                     <div class="col text-end">
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
@@ -330,7 +331,7 @@ use cms\{currentUser, strings, theme};  ?>
               <!-- target_user -->
               <div id="<?= $_accordion ?>_target_user_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
 
                 </h2>
 
@@ -403,7 +404,7 @@ use cms\{currentUser, strings, theme};  ?>
 
                   <div class="row g-2">
                     <div class="col text-end">
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
