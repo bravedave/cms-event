@@ -6,13 +6,35 @@
  *
  * MIT License
  *
-*/
+ * replace:
+ * [x] data-dismiss => data-bs-dismiss
+ * [x] data-toggle => data-bs-toggle
+ * [x] data-content => data-bs-content
+ * [x] data-title => data-bs-title
+ * [x] data-trigger => data-bs-trigger
+ * [x] data-html => data-bs-html
+ * [x] data-parent => data-bs-parent
+ * [x] text-right => text-end
+ * [x] custom-select - form-select
+ * [x] mr-* => me-*
+ * [x] ml-* => ms-*
+ * [x] pr-* => pe-*
+ * [x] pl-* => ps-*
+ * [x] badge-pill rounded-pill
+ * [x] badge-primary text-bg-primary
+ * [x] badge-warning text-bg-warning
+ * [x] font-weight-bold => fw-bold
+ * [x] font-italic => fst-italic
+ * [x] input-group-prepend - remove
+ * [x] input-group-append - remove
+ * [x] btn input-group-text => btn btn-light
+ * [x] form-row => row g-2
+ * [x] class="close" => class="btn-close"
+ */
 
 namespace cms\event;
 
-use currentUser;
-use strings;
-use theme;  ?>
+use cms\{currentUser, strings, theme};  ?>
 
 <form id="<?= $_form = strings::rand() ?>" autocomplete="off">
   <input type="hidden" name="action" value="appointment-post">
@@ -28,56 +50,46 @@ use theme;  ?>
         <div class="modal-header <?= theme::modalHeader() ?> py-2">
 
           <h5 class="modal-title" id="<?= $_modal ?>Label"><?= $this->title ?></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
 
           <div class="accordion" id="<?= $_accordion = strings::rand() ?>">
-            <div id="<?= $_accordion ?>_appointment" class="collapse show" aria-labelledby="<?= $_accordion ?>_appointment_heading" data-parent="#<?= $_accordion ?>">
+            <div id="<?= $_accordion ?>_appointment" class="collapse show" aria-labelledby="<?= $_accordion ?>_appointment_heading" data-bs-parent="#<?= $_accordion ?>">
 
               <!-- date, start time, end time -->
-              <div class="form-row mb-2">
-                <div class="col mb-2 mb-md-0">
+              <div class="row g-2">
+
+                <div class="col mb-2">
+
                   <div class="input-group">
+
                     <input type="date" class="form-control" name="date" required>
-
-                    <div class="input-group-append d-none" data-set="date_end" data-frame="multiday">
-                      <div class="input-group-text">-</div>
-                    </div>
-
+                    <div class="input-group-text d-none" data-set="date_end" data-frame="multiday">-</div>
                     <input type="date" class="form-control d-none" name="date_end" data-set="date_end" data-frame="multiday">
-
                   </div>
-
                 </div>
 
                 <div class="col-md" data-set="date_end" data-frame="oneday">
-                  <div class="form-row">
+
+                  <div class="row g-2">
+
                     <div class="col">
+
                       <div class="input-group">
+
                         <input type="text" class="form-control" name="start" required>
-
-                        <div class="input-group-append">
-                          <div class="input-group-text">-</div>
-                        </div>
-
+                        <div class="input-group-text">-</div>
                         <input type="text" class="form-control" name="end" required>
-
                       </div>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
 
               <!-- activity -->
-              <div class="form-row">
+              <div class="row g-2">
 
                 <div class="col-form-label d-none d-md-block col-md-3">activity</div>
 
@@ -85,10 +97,7 @@ use theme;  ?>
 
                   <div class="input-group">
 
-                    <div class="input-group-prepend">
-                      <div class="input-group-text"><i class="bi bi-journal-bookmark"></i></div>
-                    </div>
-
+                    <div class="input-group-text"><i class="bi bi-journal-bookmark"></i></div>
                     <select name="event" class="form-control" required>
                       <option></option>
                       <?php foreach ($this->data->events as $e) {
@@ -105,7 +114,7 @@ use theme;  ?>
               </div>
 
               <!-- person -->
-              <div class="form-row">
+              <div class="row g-2">
 
                 <div class="col-form-label d-none d-md-block col-md-3">person</div>
 
@@ -113,17 +122,14 @@ use theme;  ?>
 
                   <div class="input-group">
 
-                    <div class="input-group-prepend">
-                      <div class="input-group-text"><i class="bi bi-person"></i></div>
-                    </div>
-
+                    <div class="input-group-text"><i class="bi bi-person"></i></div>
                     <input type="text" name="people_name" placeholder="person" class="form-control">
                   </div>
                 </div>
               </div>
 
               <!-- invite person -->
-              <div class="form-row d-none" envelope>
+              <div class="row g-2 d-none" envelope>
 
                 <div class="offset-md-3 col mb-2">
 
@@ -137,58 +143,47 @@ use theme;  ?>
               </div>
 
               <!-- address_street -->
-              <div class="form-row">
+              <div class="row g-2">
                 <div class="col-form-label d-none d-md-block col-md-3">property</div>
 
                 <div class="col mb-2">
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text"><i class="bi bi-house-door"></i></div>
-                    </div>
 
+                    <div class="input-group-text"><i class="bi bi-house-door"></i></div>
                     <input type="text" name="address_street" placeholder="property" class="form-control">
-
                   </div>
-
                 </div>
-
               </div>
 
               <!-- location -->
-              <div class="form-row">
+              <div class="row g-2">
 
                 <div class="col-form-label d-none d-md-block col-md-3">location</div>
 
                 <div class="col mb-2">
 
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text"><i class="bi bi-geo"></i></div>
-                    </div>
 
+                    <div class="input-group-text"><i class="bi bi-geo"></i></div>
                     <input type="text" name="location" placeholder="location" class="form-control">
-
                   </div>
                 </div>
               </div>
 
               <!-- href -->
-              <div class="form-row">
+              <div class="row g-2">
 
                 <div class="col mb-2">
 
                   <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text"><i class="bi bi-link"></i></div>
-                    </div>
 
+                    <div class="input-group-text"><i class="bi bi-link"></i></div>
                     <input type="text" name="href" placeholder="url" class="form-control">
-
                   </div>
                 </div>
               </div>
 
-              <div class="form-row mb-2">
+              <div class="row g-2 mb-2">
                 <!-- notes -->
                 <div class="col">
                   <textarea name="notes" class="form-control" rows="3" placeholder="notes ..."></textarea>
@@ -203,15 +198,15 @@ use theme;  ?>
               <!-- attendees -->
               <div id="<?= $_accordion ?>_people_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_people_button" data-toggle="collapse" data-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
 
                 </h2>
 
               </div>
 
-              <div id="<?= $_accordion ?>_people" class="collapse" aria-labelledby="<?= $_accordion ?>_people_heading" data-parent="#<?= $_accordion ?>">
+              <div id="<?= $_accordion ?>_people" class="collapse" aria-labelledby="<?= $_accordion ?>_people_heading" data-bs-parent="#<?= $_accordion ?>">
                 <div class="card-body">
-                  <div class="form-row mb-2">
+                  <div class="row g-2 mb-2">
                     <div class="col">
                       <?php
                       $col2 = false;
@@ -242,7 +237,7 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row mb-2">
+                  <div class="row g-2 mb-2">
                     <div class="col-auto">
                       <div class="form-check">
                         <input type="checkbox" class="form-check-input" name="attendants[]" value="0" id="<?= $uid = strings::rand() ?>">
@@ -253,8 +248,8 @@ use theme;  ?>
 
                     </div>
 
-                    <div class="col text-right">
-                      <button type="button" class="btn btn-outline-primary" data-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                    <div class="col text-end">
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
@@ -270,15 +265,15 @@ use theme;  ?>
               <!-- notify -->
               <div id="<?= $_accordion ?>_notify_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_notify_button" data-toggle="collapse" data-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
 
                 </h2>
 
               </div>
 
-              <div id="<?= $_accordion ?>_notify" class="collapse" aria-labelledby="<?= $_accordion ?>_notify_heading" data-parent="#<?= $_accordion ?>">
+              <div id="<?= $_accordion ?>_notify" class="collapse" aria-labelledby="<?= $_accordion ?>_notify_heading" data-bs-parent="#<?= $_accordion ?>">
                 <div class="card-body">
-                  <div class="form-row mb-2">
+                  <div class="row g-2 mb-2">
                     <div class="col">
                       <?php
                       $col2 = false;
@@ -309,17 +304,17 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row mb-2">
-                    <div class="col">
+                  <div class="row g-2">
+                    <div class="col mb-2">
                       <textarea class="form-control" name="notify_message" rows="3" placeholder="notify message ..."></textarea>
 
                     </div>
 
                   </div>
 
-                  <div class="form-row">
-                    <div class="col text-right">
-                      <button type="button" class="btn btn-outline-primary" data-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                  <div class="row g-2">
+                    <div class="col text-end">
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
@@ -335,25 +330,23 @@ use theme;  ?>
               <!-- target_user -->
               <div id="<?= $_accordion ?>_target_user_heading">
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_target_user_button" data-toggle="collapse" data-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
+                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
 
                 </h2>
 
               </div>
 
-              <div id="<?= $_accordion ?>_target_user" class="collapse" aria-labelledby="<?= $_accordion ?>_target_user_heading" data-parent="#<?= $_accordion ?>">
+              <div id="<?= $_accordion ?>_target_user" class="collapse" aria-labelledby="<?= $_accordion ?>_target_user_heading" data-bs-parent="#<?= $_accordion ?>">
                 <div class="card-body">
                   <div class="alert alert-warning alert-dismissible d-none" role="alert">
                     Please Select target user ..
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
                     </button>
 
                   </div>
 
-                  <div class="form-row mb-2">
-                    <div class="col">
+                  <div class="row g-2">
+                    <div class="col mb-2">
                       <?php
                       $col2 = false;
                       $i = 0;
@@ -382,8 +375,8 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row mb-2">
-                    <div class="col">
+                  <div class="row g-2">
+                    <div class="col mb-2">
                       <div class="form-check">
                         <input type="checkbox" class="form-check-input" name="notify_reminder" value="1" id="<?= $uid = strings::rand() ?>">
 
@@ -408,9 +401,9 @@ use theme;  ?>
 
                   </div>
 
-                  <div class="form-row">
-                    <div class="col text-right">
-                      <button type="button" class="btn btn-outline-primary" data-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
+                  <div class="row g-2">
+                    <div class="col text-end">
+                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
                     </div>
 
@@ -427,8 +420,8 @@ use theme;  ?>
 
         <div class="modal-footer">
 
-          <button type="button" class="btn btn-outline-secondary d-none mr-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
-          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">close</button>
+          <button type="button" class="btn btn-outline-secondary d-none me-auto" id="<?= $_btnInfo = strings::rand() ?>"><i class="bi bi-info"></i></button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">close</button>
           <button type="submit" class="btn btn-primary">Save</button>
         </div>
       </div>
@@ -470,17 +463,14 @@ use theme;  ?>
             let _data = _me.data();
 
             if ('1' == _opt_data.multiday) {
-              'oneday' == _data.frame ? _me.addClass('d-none') : _me.removeClass('d-none');
 
+              _me.toggleClass('d-none', 'oneday' == _data.frame);
             } else {
-              'oneday' == _data.frame ? _me.removeClass('d-none') : _me.addClass('d-none');
 
+              _me.toggleClass('d-none', 'oneday' != _data.frame);
             }
-
           });
-
         }
-
       });
 
       $('input[name="target_user"]', '#<?= $_form ?>').on('change', function(e) {

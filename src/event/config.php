@@ -10,9 +10,10 @@
 
 namespace cms\event;
 
-use Json;
+use bravedave\dvc\json;
+use cms;
 
-class config extends \config {
+class config extends cms\config {
   const label = 'CMS Event';
 	const cms_event_db_version = 1.72;
 
@@ -72,11 +73,11 @@ class config extends \config {
 		$ret = self::$_CMS_EVENT_VERSION;
 
 		if ( (float)$set) {
-			$j = Json::read( $config = self::cms_event_config());
+			$j = json::read( $config = self::cms_event_config());
 
 			self::$_CMS_EVENT_VERSION = $j->cms_event_version = $set;
 
-			Json::write( $config, $j);
+			json::write( $config, $j);
 
 		}
 
@@ -113,7 +114,7 @@ class config extends \config {
 
 		if ( file_exists( $config = self::cms_event_config())) {
 
-      $j = (object)array_merge( $_a, (array)Json::read( $config));
+      $j = (object)array_merge( $_a, (array)json::read( $config));
 
       self::$_CMS_EVENT_VERSION = (float)$j->cms_event_version;
       self::$_CMS_EVENT_DEVELOPER = (float)$j->cms_event_developer;

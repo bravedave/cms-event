@@ -8,27 +8,26 @@
  *
 */
 
+namespace cms;
+
 use dvc\imap\account;
+use bravedave;
 
-abstract class currentUser extends dvc\currentUser {
-  static public function email() {
-    return account::$EMAIL;
+abstract class currentUser extends bravedave\dvc\currentUser {
+	static public function email() {
+		return account::$EMAIL;
+	}
 
-  }
+	public static function FirstName(): string {
+		return strings::FirstWord(account::$NAME);
+	}
 
-  public static function FirstName() : string {
-    return strings::FirstWord( account::$NAME);
-
-  }
-
-  static function name() {
-    return account::$NAME;
-
+	static function name() {
+		return account::$NAME;
 	}
 
 	static function diaryEventOrder() {
 		return '';
-
 	}
 
 	static public function mailer() {
@@ -42,29 +41,25 @@ abstract class currentUser extends dvc\currentUser {
 
 		$mail->isSMTP(); // use smtp with server set to mail
 
-		if ( account::$SMTP_SERVER) {
+		if (account::$SMTP_SERVER) {
 			$mail->Host = account::$SMTP_SERVER;
-
 		}
 
-		if ( account::$SMTP_PORT) {
+		if (account::$SMTP_PORT) {
 			$mail->Port = account::$SMTP_PORT;
-      // if ( 587 == account::$SMTP_PORT) $mail->SMTPSecure = 'tls';
+			// if ( 587 == account::$SMTP_PORT) $mail->SMTPSecure = 'tls';
 
 		}
 
-    // \sys::logger( sprintf('<%s:%s/%s> %s', $mail->Host, $mail->Port, $mail->SMTPSecure, __METHOD__));
+		// \sys::logger( sprintf('<%s:%s/%s> %s', $mail->Host, $mail->Port, $mail->SMTPSecure, __METHOD__));
 
 
-		if ( account::$USERNAME && account::$PASSWORD) {
+		if (account::$USERNAME && account::$PASSWORD) {
 			$mail->SMTPAuth = true;
 			$mail->Username = account::$SMTP_USERNAME;
 			$mail->Password = account::$SMTP_PASSWORD;
-
 		}
 
-		return ( $mail);
-
+		return ($mail);
 	}
-
 }

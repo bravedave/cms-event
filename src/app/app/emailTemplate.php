@@ -10,6 +10,8 @@
 
 abstract class emailTemplate {
 
+  public $messageSpace = '';
+
   abstract function BuildContactInfoFromUser();
 
   abstract function renderInline();

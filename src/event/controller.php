@@ -10,12 +10,10 @@
 
 namespace cms\event;
 
-use currentUser;
-use dvc;
-use green;
-use dvc\Json;
-use Response;
-use strings;
+use cms\{currentUser, strings};
+use bravedave\dvc\{json, logger, Response};
+use cms, green;
+// use dvc;
 
 class controller extends \Controller {
   protected $viewPath = __DIR__ . '/views/';
@@ -103,9 +101,9 @@ class controller extends \Controller {
       if ($id = (int)$this->getPost('id')) {
         $dao = new dao\property_diary;
         $dao->delete($id);
-        Json::ack($action);
+        json::ack($action);
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('appointment-post' == $action) {
 
@@ -227,7 +225,7 @@ class controller extends \Controller {
         if ($id = (int)$this->getPost('id')) {
 
           $dao->UpdateByID($a, $id);
-          Json::ack($action);
+          json::ack($action);
 
           if ($notify_users) {
             foreach ($notify_users as $user) $notifyUser('(u)', $user);
@@ -247,17 +245,17 @@ class controller extends \Controller {
                   $start_time,
                   $name ? sprintf('with %s ', $name) : '',
                   $a['location'] ? sprintf('at %s ', $a['location']) : '',
-                  \currentUser::FirstName()
+                  currentUser::FirstName()
 
                 );
 
-                if (\class_exists('\cms\sms')) {
+                if (class_exists('\cms\sms')) {
 
-                  \cms\sms::notifyUser($a['target_user'], $msg);
+                  cms\sms::notifyUser($a['target_user'], $msg);
                 } else {
 
-                  \sys::logger(sprintf('<\cms\sms - class not found> : %s', __METHOD__));
-                  \sys::logger(sprintf('<%s> : %s', $msg, __METHOD__));
+                  logger::info(sprintf('<\cms\sms - class not found> : %s', __METHOD__));
+                  logger::info(sprintf('<%s> : %s', $msg, __METHOD__));
                 }
               }
             }
@@ -267,19 +265,19 @@ class controller extends \Controller {
             foreach ($notify_users as $user) $notifyUser('', $user);
           }
 
-          Json::ack($action);
+          json::ack($action);
         }
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('delete' == $action) {
       if (($id = (int)$this->getPost('id')) > 0) {
         $dao = new dao\diary_events;
         $dao->delete($id);
 
-        Json::ack($action);
+        json::ack($action);
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('diary-event-save' == $action) {
 
@@ -310,15 +308,15 @@ class controller extends \Controller {
           }
 
           $dao->UpdateByID($a, $id);
-          Json::ack($action);
+          json::ack($action);
         } else {
 
-          Json::nak($action);
+          json::nak($action);
         }
       } else {
 
         $dao->Insert($a);
-        Json::ack($action);
+        json::ack($action);
       }
     } elseif ('get-feed' == $action) {
       /*
@@ -348,7 +346,7 @@ class controller extends \Controller {
           $reader = dvc\cal\reader::JSONString(json_encode($this->jCalendar(config::calendar_sales, $start, $end)));
           $feed = $reader->feed($start, $end);
 
-          Json::ack($action)
+          json::ack($action)
             ->add('data', $feed);
         }
       } else {
@@ -367,7 +365,7 @@ class controller extends \Controller {
       )(_brayworth_);
       */
       $dao = new dao\property_diary;
-      Json::ack($action)
+      json::ack($action)
         ->add('data', $dao->getReminders(currentUser::id()));
     } elseif ('getevents' == $action) {
       /*
@@ -400,10 +398,10 @@ class controller extends \Controller {
           ];
         }
 
-        Json::ack($action)
+        json::ack($action)
           ->add('data', $a);
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif (in_array($action, ['mark-inactive', 'mark-inactive-undo'])) {
       if ($id = (int)$this->getPost('id')) {
@@ -414,13 +412,13 @@ class controller extends \Controller {
 
           $dao->UpdateByID($a, $dto->id);
 
-          Json::ack($action)
+          json::ack($action)
             ->add('inactive', 'mark-inactive' == $action ? 1 : 0);
         } else {
-          Json::nak($action);
+          json::nak($action);
         }
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('move' == $action) {
       if ($id = (int)$this->getPost('id')) {
@@ -437,13 +435,13 @@ class controller extends \Controller {
 
           $dao->UpdateByID($a, $dto->id);
 
-          Json::ack($action)
+          json::ack($action)
             ->add('order', $order);
         } else {
-          Json::nak($action);
+          json::nak($action);
         }
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('reminder-dismiss' == $action) {
       if ($id = (int)$this->getPost('id')) {
@@ -451,7 +449,7 @@ class controller extends \Controller {
         $dao->UpdateByID(['notify_reminder' => config::notify_reminder_dismissed], $id);
       }
 
-      Json::ack($action);
+      json::ack($action);
     } elseif ('property-diary-get-by-id' == $action) {
 
       if ($id = (int)$this->getPost('id')) {
@@ -485,32 +483,32 @@ class controller extends \Controller {
             if ($a) $dto->attendants = json_encode($a);
           }
 
-          Json::ack($action)
+          json::ack($action)
             ->add('data', $dto);
         } else {
 
-          Json::nak($action);
+          json::nak($action);
         }
       } else {
 
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('search-people' == $action) {
       if ($term = $this->getPost('term')) {
 
-        Json::ack($action)
+        json::ack($action)
           ->add('term', $term)
           ->add('data', green\search::people($term));
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('search-properties' == $action) {
       if ($term = $this->getPost('term')) {
-        Json::ack($action)
+        json::ack($action)
           ->add('term', $term)
           ->add('data', green\search::properties($term));
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } elseif ('toggle-hide-event' == $action) {
       if ($id = (int)$this->getPost('id')) {
@@ -520,20 +518,20 @@ class controller extends \Controller {
           $key = array_search((int)currentUser::id(), $users);
 
           if ($key === false) {
-            Json::ack(sprintf('%s : hide', $action))->add('hidden', 1);
+            json::ack(sprintf('%s : hide', $action))->add('hidden', 1);
             $users[] = (int)currentUser::id();
           } else {
-            Json::ack(sprintf('%s : show', $action))->add('hidden', 0);
+            json::ack(sprintf('%s : show', $action))->add('hidden', 0);
             unset($users[$key]);
           }
 
           $a = ['exclude_for_user' => implode(';', $users) . ';'];
           $dao->UpdateByID($a, $dto->id);
         } else {
-          Json::nak($action);
+          json::nak($action);
         }
       } else {
-        Json::nak($action);
+        json::nak($action);
       }
     } else {
       parent::postHandler();

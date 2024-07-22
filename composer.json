@@ -2,7 +2,7 @@
   "name": "bravedave/cms-event",
   "description": "CMS Event",
   "minimum-stability": "dev",
-  "prefer-stable": true,
+  "prefer-stable": false,
   "license": "MIT",
   "authors": [
     {

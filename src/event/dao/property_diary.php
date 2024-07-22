@@ -11,7 +11,7 @@
 namespace cms\event\dao;
 
 use cms\event\config;
-use currentUser;
+use cms\{currentUser};
 use dao;
 
 class property_diary extends dao\property_diary {

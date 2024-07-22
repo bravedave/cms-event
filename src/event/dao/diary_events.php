@@ -11,7 +11,7 @@
 namespace cms\event\dao;
 
 use cms\event\{config, sys};
-use currentUser;
+use cms\currentUser;
 
 use bravedave\dvc\dao;
 

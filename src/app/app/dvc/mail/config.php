@@ -11,32 +11,29 @@
 
 namespace dvc\mail;
 
+use cms;
+
 abstract class config {
 	static $ENABLED = '';
 	static $MODE = '';
 
-    static function config() {
-		return \config::dataPath() . DIRECTORY_SEPARATOR . 'mail-config.json';
-
+	static function config() {
+		return cms\config::dataPath() . DIRECTORY_SEPARATOR . 'mail-config.json';
 	}
 
 	static function init() {
-		if ( !class_exists( 'dvc\ews\config')) {
+		if (!class_exists('dvc\ews\config')) {
 			self::$MODE = 'imap';
-
 		}
 
-        if ( file_exists( $config = self::config())) {
-			$j = json_decode( file_get_contents( $config));
+		if (file_exists($config = self::config())) {
+			$j = json_decode(file_get_contents($config));
 
-			if ( isset( $j->mode)) self::$MODE = $j->mode;
-
+			if (isset($j->mode)) self::$MODE = $j->mode;
 		}
 
-		self::$ENABLED = ( (bool)self::$MODE);
-
+		self::$ENABLED = ((bool)self::$MODE);
 	}
-
 }
 
 config::init();
