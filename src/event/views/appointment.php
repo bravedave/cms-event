@@ -196,14 +196,12 @@ use cms\{currentUser, strings, theme};  ?>
             </div>
 
             <div class="card">
+
               <!-- attendees -->
-              <div id="<?= $_accordion ?>_people_heading">
-                <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
+              <h2 id="<?= $_accordion ?>_people_heading" class="accordion-header">
 
-                </h2>
-
-              </div>
+                <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
+              </h2>
 
               <div id="<?= $_accordion ?>_people" class="collapse" aria-labelledby="<?= $_accordion ?>_people_heading" data-bs-parent="#<?= $_accordion ?>">
                 <div class="card-body">
@@ -259,18 +257,14 @@ use cms\{currentUser, strings, theme};  ?>
                 </div>
 
               </div>
-
             </div>
 
             <div class="card">
               <!-- notify -->
-              <div id="<?= $_accordion ?>_notify_heading">
-                <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
+              <h2 id="<?= $_accordion ?>_notify_heading" class="accordion-header">
 
-                </h2>
-
-              </div>
+                <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
+              </h2>
 
               <div id="<?= $_accordion ?>_notify" class="collapse" aria-labelledby="<?= $_accordion ?>_notify_heading" data-bs-parent="#<?= $_accordion ?>">
                 <div class="card-body">
@@ -329,12 +323,12 @@ use cms\{currentUser, strings, theme};  ?>
 
             <div class="card">
               <!-- target_user -->
-              <div id="<?= $_accordion ?>_target_user_heading">
+              <div id="<?= $_accordion ?>_target_user_heading" class="accordion-header">
+
                 <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
 
+                  <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
                 </h2>
-
               </div>
 
               <div id="<?= $_accordion ?>_target_user" class="collapse" aria-labelledby="<?= $_accordion ?>_target_user_heading" data-bs-parent="#<?= $_accordion ?>">
