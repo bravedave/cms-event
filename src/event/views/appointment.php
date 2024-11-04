@@ -426,7 +426,7 @@ use cms\{currentUser, strings, theme};  ?>
   <script>
     (_ => {
 
-      const form = '<?= $_form ?>';
+      const form = $('#<?= $_form ?>');
 
       form.find('input[name="start"]').on('change', function(e) {
 
