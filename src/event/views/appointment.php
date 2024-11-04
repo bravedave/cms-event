@@ -44,20 +44,26 @@ use cms\{currentUser, strings, theme};  ?>
   <input type="hidden" name="people_email"><!-- not saved, required to activate send invite -->
   <input type="hidden" name="property_id">
   <input type="hidden" name="multiday" value="0">
-  <div class="modal fade" data-backdrop="static" tabindex="-1" role="dialog" id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label" aria-hidden="true">
+  <div class="modal fade" data-backdrop="static" tabindex="-1" role="dialog"
+    id="<?= $_modal = strings::rand() ?>" aria-labelledby="<?= $_modal ?>Label"
+    aria-modal="true" aria-hidden="true">
+
     <div class="modal-dialog modal-fullscreen-sm modal-dialog-centered" role="document">
       <div class="modal-content">
 
         <div class="modal-header <?= theme::modalHeader() ?> py-2">
 
           <h5 class="modal-title" id="<?= $_modal ?>Label"><?= $this->title ?></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
         </div>
 
         <div class="modal-body">
 
           <div class="accordion" id="<?= $_accordion = strings::rand() ?>">
-            <div id="<?= $_accordion ?>_appointment" class="collapse show" aria-labelledby="<?= $_accordion ?>_appointment_heading" data-bs-parent="#<?= $_accordion ?>">
+
+            <div id="<?= $_accordion ?>_appointment" class="collapse show"
+              aria-labelledby="<?= $_accordion ?>_appointment_heading"
+              data-bs-parent="#<?= $_accordion ?>">
 
               <!-- date, start time, end time -->
               <div class="row g-2">
@@ -195,9 +201,9 @@ use cms\{currentUser, strings, theme};  ?>
 
             </div>
 
-            <div class="card">
+            <!-- attendees -->
+            <div class="accordion-item">
 
-              <!-- attendees -->
               <h2 id="<?= $_accordion ?>_people_heading" class="accordion-header">
 
                 <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_people_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_people" aria-expanded="false" aria-controls="<?= $_accordion ?>_people"></button>
@@ -212,6 +218,7 @@ use cms\{currentUser, strings, theme};  ?>
                       $i = 0;
 
                       foreach ($this->data->users as $user) {
+
                         if (!$col2 && $i++ >= count($this->data->users) / 2) {
                           print '</div><div class="col">';
                           $col2 = true;
@@ -219,16 +226,15 @@ use cms\{currentUser, strings, theme};  ?>
 
                       ?>
                         <div class="form-check">
-                          <input type="checkbox" class="form-check-input" name="attendants[]" <?php // if ( currentUser::id() == $user->id) print 'checked';
-                                                                                              ?> value="<?= $user->id ?>" data-name="<?= $user->name ?>" id="<?= $uid = strings::rand() ?>">
+
+                          <input type="checkbox" class="form-check-input" name="attendants[]"
+                            value="<?= $user->id ?>" data-name="<?= $user->name ?>"
+                            id="<?= $uid = strings::rand() ?>">
 
                           <label class="form-check-label" for="<?= $uid ?>">
                             <?= $user->name ?>
-
                           </label>
-
                         </div>
-
                       <?php
                       } ?>
 
@@ -237,32 +243,31 @@ use cms\{currentUser, strings, theme};  ?>
                   </div>
 
                   <div class="row g-2 mb-2">
+
                     <div class="col-auto">
+
                       <div class="form-check">
+
                         <input type="checkbox" class="form-check-input" name="attendants[]" value="0" id="<?= $uid = strings::rand() ?>">
-
                         <label class="form-check-label" for="<?= $uid ?>">all users</label>
-
                       </div>
-
                     </div>
 
                     <div class="col text-end">
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
 
+                      <button type="button" class="btn btn-outline-primary"
+                        data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment"
+                        aria-expanded="false" aria-controls="<?= $_accordion ?>_people">done</button>
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
             </div>
 
-            <div class="card">
+            <div class="accordion-item">
+
               <!-- notify -->
               <h2 id="<?= $_accordion ?>_notify_heading" class="accordion-header">
-
                 <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_notify_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_notify" aria-expanded="false" aria-controls="<?= $_accordion ?>_notify"></button>
               </h2>
 
@@ -271,32 +276,29 @@ use cms\{currentUser, strings, theme};  ?>
                   <div class="row g-2 mb-2">
                     <div class="col">
                       <?php
+
                       $col2 = false;
                       $i = 0;
-
                       foreach ($this->data->users as $user) {
+
                         if (!$col2 && $i++ >= count($this->data->users) / 2) {
                           print '</div><div class="col">';
                           $col2 = true;
-                        }
-
-                      ?>
+                        } ?>
                         <div class="form-check">
-                          <input type="checkbox" class="form-check-input" name="notify_users[]" <?php // if ( currentUser::id() == $user->id) print 'checked';
-                                                                                                ?> value="<?= $user->id ?>" data-name="<?= $user->name ?>" id="<?= $uid = strings::rand() ?>">
+
+                          <input type="checkbox" class="form-check-input" name="notify_users[]"
+                            value="<?= $user->id ?>"
+                            data-name="<?= $user->name ?>"
+                            id="<?= $uid = strings::rand() ?>">
 
                           <label class="form-check-label" for="<?= $uid ?>">
                             <?= $user->name ?>
-
                           </label>
-
                         </div>
-
                       <?php
                       } ?>
-
                     </div>
-
                   </div>
 
                   <div class="row g-2">
@@ -321,12 +323,11 @@ use cms\{currentUser, strings, theme};  ?>
 
             </div>
 
-            <div class="card">
+            <div class="accordion-item">
+
               <!-- target_user -->
               <div id="<?= $_accordion ?>_target_user_heading" class="accordion-header">
-
                 <h2 class="mb-0">
-
                   <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
                 </h2>
               </div>
@@ -424,38 +425,39 @@ use cms\{currentUser, strings, theme};  ?>
   </div>
   <script>
     (_ => {
-      $('input[name="start"]', '#<?= $_form ?>').on('change', function(e) {
-        CheckTimeFormat.call(this);
 
-        let s = $(this).val();
+      const form = '<?= $_form ?>';
+
+      form.find('input[name="start"]').on('change', function(e) {
+
+        CheckTimeFormat.call(this);
+        const s = $(this).val();
         if (s == '') return;
 
-        let j = timeHandler(s);
-        // console.log( j.toString());
+        const j = timeHandler(s);
 
         j.Minutes += 30;
-
-        $('input[name="end"]', '#<?= $_form ?>').val(j.toString());
-
+        form.find('input[name="end"]').val(j.toString());
       });
 
-      // console.log( $('input[name="start"]', '#<?= $_form ?>'));
+      form.find('input[name="end"]').on('change', CheckTimeFormat);
 
-      $('input[name="end"]', '#<?= $_form ?>').on('change', CheckTimeFormat);
+      form.find('select[name="event"]').on('change', function(e) {
 
-      $('select[name="event"]', '#<?= $_form ?>').on('change', function(e) {
-        let _me = $(this);
-        let option = $('option[value="' + _me.val() + '"]', this);
+        const _me = $(this);
+        const option = _me.find('option[value="' + _me.val() + '"]');
         if (option.length > 0) {
-          let _opt_data = option.data();
+
+          const _opt_data = option.data();
 
           // console.log( option);
-          $('input[name="multiday"]', '#<?= $_form ?>').val(_opt_data.multiday);
-          $('input[name="start"], input[name="end"]', '#<?= $_form ?>').prop('required', '1' != _opt_data.multiday);
+          form.find('input[name="multiday"]').val(_opt_data.multiday);
+          form.find('input[name="start"], input[name="end"]').prop('required', '1' != _opt_data.multiday);
 
-          $('[data-set="date_end"]', '#<?= $_form ?>').each((i, el) => {
-            let _me = $(el);
-            let _data = _me.data();
+          form.find('[data-set="date_end"]').each((i, el) => {
+
+            const _me = $(el);
+            const _data = _me.data();
 
             if ('1' == _opt_data.multiday) {
 
@@ -826,30 +828,24 @@ use cms\{currentUser, strings, theme};  ?>
             })
             .trigger('update-placeholder');
 
-          $('input[name="people_name"]', '#<?= $_form ?>')
-            .autofill({
-              autoFocus: true,
-              source: _.search.people,
-              select: (e, ui) => {
-                let o = ui.item;
+          form.find('input[name="people_name"]').autofill({
+            autoFocus: true,
+            source: _.search.people,
+            select: (e, ui) => {
+              let o = ui.item;
 
-                // console.log(o);
+              // console.log(o);
 
-                $('input[name="people_id"]', '#<?= $_form ?>').val(o.id);
-                $('input[name="people_email"]', '#<?= $_form ?>').val(o.email);
-                $('input[name="people_mobile"]', '#<?= $_form ?>').val(o.mobile);
-                $('#<?= $_form ?>').trigger('activate-invite');
-
-              },
-
-            });
-
+              form.find('input[name="people_id"]').val(o.id);
+              form.find('input[name="people_email"]').val(o.email);
+              form.find('input[name="people_mobile"]').val(o.mobile);
+              form.trigger('activate-invite');
+            },
+          });
         });
 
         $('#<?= $_accordion ?>_people, #<?= $_accordion ?>_notify, #<?= $_accordion ?>_target_user').trigger('reconcile');
-
       });
-
     })(_brayworth_);
   </script>
 </form>
