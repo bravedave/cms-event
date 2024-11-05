@@ -190,37 +190,34 @@ use cms\{currentUser, strings, theme};  ?>
               <div id="<?= $_accordion ?>_people" class="collapse"
                 aria-labelledby="<?= $_accordion ?>_people_heading"
                 data-bs-parent="#<?= $_accordion ?>">
-                <div class="card-body">
+
+                <div class="p-2">
+
                   <div class="row g-2 mb-2">
+
                     <div class="col">
                       <?php
+
                       $col2 = false;
                       $i = 0;
-
                       foreach ($this->data->users as $user) {
 
                         if (!$col2 && $i++ >= count($this->data->users) / 2) {
                           print '</div><div class="col">';
                           $col2 = true;
-                        }
-
-                      ?>
+                        } ?>
                         <div class="form-check">
 
                           <input type="checkbox" class="form-check-input" name="attendants[]"
                             value="<?= $user->id ?>" data-name="<?= $user->name ?>"
                             id="<?= $uid = strings::rand() ?>">
-
-                          <label class="form-check-label" for="<?= $uid ?>">
-                            <?= $user->name ?>
-                          </label>
+                          <label class="form-check-label" for="<?= $uid ?>"><?= $user->name ?></label>
                         </div>
                       <?php
                       } ?>
-
                     </div>
-
                   </div>
+
 
                   <div class="row g-2 mb-2">
 
@@ -254,8 +251,11 @@ use cms\{currentUser, strings, theme};  ?>
               </h2>
 
               <div id="<?= $_accordion ?>_notify" class="collapse" aria-labelledby="<?= $_accordion ?>_notify_heading" data-bs-parent="#<?= $_accordion ?>">
-                <div class="card-body">
+
+                <div class="p-2">
+
                   <div class="row g-2 mb-2">
+
                     <div class="col">
                       <?php
 
@@ -283,12 +283,94 @@ use cms\{currentUser, strings, theme};  ?>
                     </div>
                   </div>
 
+                  <div class="mb-2">
+                    <textarea class="form-control" name="notify_message" rows="3" placeholder="notify message ..."></textarea>
+                  </div>
+
+                  <div class="text-end">
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse"
+                      data-bs-target="#<?= $_accordion ?>_notify">done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- target_user -->
+            <div class="accordion-item">
+
+              <div id="<?= $_accordion ?>_target_user_heading" class="accordion-header">
+                <h2 class="mb-0">
+                  <button class="btn btn-light btn-block text-left collapsed accordion-button"
+                    type="button" id="<?= $_accordion ?>_target_user_button"
+                    data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user"
+                    aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
+                </h2>
+              </div>
+
+              <div id="<?= $_accordion ?>_target_user" class="collapse" aria-labelledby="<?= $_accordion ?>_target_user_heading" data-bs-parent="#<?= $_accordion ?>">
+
+                <div class="p-2">
+
+                  <div class="alert alert-warning alert-dismissible d-none" role="alert">
+                    Please Select target user ..
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                  </div>
+
                   <div class="row g-2">
+
                     <div class="col mb-2">
-                      <textarea class="form-control" name="notify_message" rows="3" placeholder="notify message ..."></textarea>
+                      <?php
 
+                      $col2 = false;
+                      $i = 0;
+                      foreach ($this->data->users as $user) {
+
+                        if (!$col2 && $i++ >= count($this->data->users) / 2) {
+                          print '</div><div class="col">';
+                          $col2 = true;
+                        } ?>
+                        <div class="form-check">
+                          <input type="radio" class="form-check-input" name="target_user" <?php if (currentUser::id() == $user->id) print 'checked'; ?> value="<?= $user->id ?>" data-name="<?= $user->name ?>" id="<?= $uid = strings::rand() ?>">
+
+                          <label class="form-check-label" for="<?= $uid ?>">
+                            <?= $user->name ?>
+                          </label>
+                        </div>
+                      <?php
+                      } ?>
                     </div>
+                  </div>
 
+
+
+
+
+
+
+
+
+                  <div class="row g-2">
+
+                    <div class="col mb-2">
+
+                      <div class="form-check">
+
+                        <input type="checkbox" class="form-check-input" name="notify_reminder" value="1" id="<?= $uid = strings::rand() ?>">
+                        <label class="form-check-label" for="<?= $uid ?>">
+                          Show Reminder
+                        </label>
+                      </div>
+
+                      <div class="form-check d-none" id="<?= $_uidNotifyUser = strings::rand() ?>">
+
+                        <input type="checkbox" class="form-check-input" name="notify_target_user"
+                          value="yes" id="<?= $uid = strings::rand() ?>">
+                        <label class="form-check-label" for="<?= $uid ?>">
+                          Notify User
+                        </label>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="row g-2">
@@ -296,101 +378,12 @@ use cms\{currentUser, strings, theme};  ?>
                     <div class="col text-end">
 
                       <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse"
-                        data-bs-target="#<?= $_accordion ?>_notify">done</button>
+                        data-bs-target="#<?= $_accordion ?>_target_user">done</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div class="accordion-item">
-
-              <!-- target_user -->
-              <div id="<?= $_accordion ?>_target_user_heading" class="accordion-header">
-                <h2 class="mb-0">
-                  <button class="btn btn-light btn-block text-left collapsed accordion-button" type="button" id="<?= $_accordion ?>_target_user_button" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_target_user" aria-expanded="false" aria-controls="<?= $_accordion ?>_target_user"></button>
-                </h2>
-              </div>
-
-              <div id="<?= $_accordion ?>_target_user" class="collapse" aria-labelledby="<?= $_accordion ?>_target_user_heading" data-bs-parent="#<?= $_accordion ?>">
-                <div class="card-body">
-                  <div class="alert alert-warning alert-dismissible d-none" role="alert">
-                    Please Select target user ..
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                    </button>
-
-                  </div>
-
-                  <div class="row g-2">
-                    <div class="col mb-2">
-                      <?php
-                      $col2 = false;
-                      $i = 0;
-
-                      foreach ($this->data->users as $user) {
-                        if (!$col2 && $i++ >= count($this->data->users) / 2) {
-                          print '</div><div class="col">';
-                          $col2 = true;
-                        }
-
-                      ?>
-                        <div class="form-check">
-                          <input type="radio" class="form-check-input" name="target_user" <?php if (currentUser::id() == $user->id) print 'checked'; ?> value="<?= $user->id ?>" data-name="<?= $user->name ?>" id="<?= $uid = strings::rand() ?>">
-
-                          <label class="form-check-label" for="<?= $uid ?>">
-                            <?= $user->name ?>
-
-                          </label>
-
-                        </div>
-
-                      <?php
-                      } ?>
-
-                    </div>
-
-                  </div>
-
-                  <div class="row g-2">
-                    <div class="col mb-2">
-                      <div class="form-check">
-                        <input type="checkbox" class="form-check-input" name="notify_reminder" value="1" id="<?= $uid = strings::rand() ?>">
-
-                        <label class="form-check-label" for="<?= $uid ?>">
-                          Show Reminder
-
-                        </label>
-
-                      </div>
-
-                      <div class="form-check d-none" id="<?= $_uidNotifyUser = strings::rand() ?>">
-                        <input type="checkbox" class="form-check-input" name="notify_target_user" value="yes" id="<?= $uid = strings::rand() ?>">
-
-                        <label class="form-check-label" for="<?= $uid ?>">
-                          Notify User
-
-                        </label>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  <div class="row g-2">
-                    <div class="col text-end">
-                      <button type="button" class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#<?= $_accordion ?>_appointment" aria-expanded="true" aria-controls="<?= $_accordion ?>_appointment">done</button>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
           </div>
         </div>
 
