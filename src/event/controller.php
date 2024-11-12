@@ -589,6 +589,7 @@ class controller extends \Controller {
     if ($res = (new dao\diary_events)->getAll('event_name, multi_day, exclude_for_user')) {
 
       foreach ($res->dtoSet() as $d) {
+
         if ($hidden = dao\diary_events::isHidden($d)) continue;
 
         $this->data->events[] = (object)[
@@ -606,18 +607,15 @@ class controller extends \Controller {
     if ($id = (int)$id) {
 
       if ($dto = (new dao\diary_events)->getByID($id)) {
+
         $this->data = (object)[
           'title' => $this->title = 'Edit Diary Event',
           'action' => 'update',
           'dto' => $dto
-
         ];
 
         $this->load('edit');
-      } else {
-
-        $this->load('not-found');
-      }
+      } else $this->load('not-found');
     } else {
 
       $this->data = (object)[
