@@ -15,7 +15,7 @@ use cms;
 
 class config extends cms\config {
 	const label = 'CMS Event';
-	const cms_event_db_version = 1.72;
+	const cms_event_db_version = 2;
 
 	const calendar_global = 1;
 
