@@ -14,20 +14,20 @@ use bravedave\dvc\json;
 use cms;
 
 class config extends cms\config {
-  const label = 'CMS Event';
+	const label = 'CMS Event';
 	const cms_event_db_version = 1.72;
 
-  const calendar_global = 1;
+	const calendar_global = 1;
 
-  const calendar_sales = 11;
-  const calendar_rental = 12;
+	const calendar_sales = 11;
+	const calendar_rental = 12;
 
-  const calendars = [
-    'Global' => self::calendar_global,
-    'Sales' => self::calendar_sales,
-    'Rentals' => self::calendar_rental,
+	const calendars = [
+		'Global' => self::calendar_global,
+		'Sales' => self::calendar_sales,
+		'Rentals' => self::calendar_rental,
 
-  ];
+	];
 
 	const notify_reminder = 1;
 	const notify_reminder_dismissed = 2;
@@ -58,7 +58,8 @@ class config extends cms\config {
 		'SMS',
 		'SMS IN',
 		'Task',
-		'p4s', 'p2s',
+		'p4s',
+		'p2s',
 		'Cont Sign',
 		'Cont Cond',
 		'Cont Sett',
@@ -66,63 +67,61 @@ class config extends cms\config {
 
 	];
 
-	static $_CMS_EVENT_DEVELOPER = false;
-  static protected $_CMS_EVENT_VERSION = 0;
+	// static $_CMS_EVENT_DEVELOPER = false;
+	// static protected $_CMS_EVENT_VERSION = 0;
 
-	static protected function cms_event_version( $set = null) {
-		$ret = self::$_CMS_EVENT_VERSION;
+	// static protected function cms_event_version( $set = null) {
+	// 	$ret = self::$_CMS_EVENT_VERSION;
 
-		if ( (float)$set) {
-			$j = json::read( $config = self::cms_event_config());
+	// 	if ( (float)$set) {
+	// 		$j = json::read( $config = self::cms_event_config());
 
-			self::$_CMS_EVENT_VERSION = $j->cms_event_version = $set;
+	// 		// self::$_CMS_EVENT_VERSION = $j->cms_event_version = $set;
 
-			json::write( $config, $j);
+	// 		json::write( $config, $j);
 
-		}
+	// 	}
 
-		return $ret;
+	// 	return $ret;
 
-	}
+	// }
 
 	static function cms_event_checkdatabase() {
-		if ( self::cms_event_version() < self::cms_event_db_version) {
-      $dao = new dao\dbinfo;
-			$dao->dump( $verbose = false);
+		// if ( self::cms_event_version() < self::cms_event_db_version) {
+		//   $dao = new dao\dbinfo;
+		// 	$dao->dump( $verbose = false);
 
-			config::cms_event_version( self::cms_event_db_version);
+		// 	config::cms_event_version( self::cms_event_db_version);
 
-		}
-
+		// }
+		$dao = new dao\dbinfo(null, method_exists(__CLASS__, 'cmsStore') ? self::cmsStore() : self::dataPath());
+		$dao->checkVersion('cms_noleggio', self::cms_event_db_version);
 	}
 
 	static function cms_event_config() {
-		return implode( DIRECTORY_SEPARATOR, [
-      rtrim( self::dataPath(), '/ '),
-      'cms_event.json'
+		return implode(DIRECTORY_SEPARATOR, [
+			rtrim(self::dataPath(), '/ '),
+			'cms_event.json'
 
-    ]);
-
+		]);
 	}
 
-  static function cms_event_init() {
-    $_a = [
-      'cms_event_version' => self::$_CMS_EVENT_VERSION,
-      'cms_event_developer' => self::$_CMS_EVENT_DEVELOPER,
+	static function cms_event_init() {
+		// $_a = [
+		// 'cms_event_version' => self::$_CMS_EVENT_VERSION,
+		//   'cms_event_developer' => self::$_CMS_EVENT_DEVELOPER,
 
-    ];
+		// ];
 
-		if ( file_exists( $config = self::cms_event_config())) {
+		if (file_exists($config = self::cms_event_config())) {
 
-      $j = (object)array_merge( $_a, (array)json::read( $config));
+			// $j = (object)array_merge( $_a, (array)json::read( $config));
 
-      self::$_CMS_EVENT_VERSION = (float)$j->cms_event_version;
-      self::$_CMS_EVENT_DEVELOPER = (float)$j->cms_event_developer;
-
+			// self::$_CMS_EVENT_VERSION = (float)$j->cms_event_version;
+			// self::$_CMS_EVENT_DEVELOPER = (float)$j->cms_event_developer;
+			unlink($config);
 		}
-
 	}
-
 }
 
 config::cms_event_init();

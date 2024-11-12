@@ -35,10 +35,10 @@ class controller extends \Controller {
 
     $secondary = ['index'];
 
-    if (config::$_CMS_EVENT_DEVELOPER) {
-      // $secondary[] = 'index-developer';
+    // if (config::$_CMS_EVENT_DEVELOPER) {
+    //   // $secondary[] = 'index-developer';
 
-    }
+    // }
 
     $this->render([
       'title' => $this->title = 'Diary Events',
@@ -165,10 +165,11 @@ class controller extends \Controller {
 
         $a['subject'] = implode(' - ', $_subject);
 
-        $notifyUser = function ($suffix, $uid) use ($a) {
+        $notifyUser = function ($suffix, $uid) use ($a): bool {
 
           $dao = new dao\users;
           if ($uDto = $dao->getByID($uid)) {
+
             $start = date('D d/m - g:ia', strtotime($a['date_start']));
 
             $notes = [
@@ -213,12 +214,19 @@ class controller extends \Controller {
             $mail->Subject = sprintf('Appt.%s %s - %s', $suffix, $a['event_name'], $start);
             $mail->msgHTML($msgHtml);
             $mail->AddAddress($uDto->email, $uDto->name);
-            if (!$mail->send()) {
-              \sys::logger(sprintf('<failed to send notification> <%s> %s', $mail->ErrorInfo, __METHOD__));
+            if ($mail->send()) {
+
+              return true;
+            } else {
+
+              logger::info(sprintf('<failed to send notification> <%s> %s', $mail->ErrorInfo, __METHOD__));
             }
           } else {
-            \sys::logger(sprintf('<failed to find user to notify>  %s', __METHOD__));
+
+            logger::info(sprintf('<failed to find user to notify>  %s', __METHOD__));
           }
+
+          return false;
         };
 
         $dao = new dao\property_diary;
@@ -228,16 +236,38 @@ class controller extends \Controller {
           json::ack($action);
 
           if ($notify_users) {
-            foreach ($notify_users as $user) $notifyUser('(u)', $user);
+
+            $notified = [];
+            foreach ($notify_users as $user) {
+
+              if ($notifyUser('(u)', $user)) {
+
+                $notified[] = ['id' => $user, 'date' => date('Y-m-d H:i:s')];
+              }
+            }
+
+            if ($notified) {
+
+              if ($pdDTO = $dao->getByID($id)) {
+
+                // append $notified to the end of $pdDTO->notify_users_sent;
+                $notify_users_sent = $pdDTO->notify_users_sent ? json_decode($pdDTO->notify_users_sent) : [];
+                foreach ($notified as $n) $notify_users_sent[] = $n;
+                $dao->UpdateByID(['notify_users_sent' => json_encode($notify_users_sent)], $id);
+              }
+            }
           }
         } else {
 
           $a['created'] = $a['updated'];
-          $dao->Insert($a);
+          $id = $dao->Insert($a);
           if ((int)$a['target_user'] && (int)$a['target_user'] != currentUser::id()) {
+
             if ('yes' == $this->getPost('notify_target_user')) {
+
               $dao = new dao\users;
               if ($u = $dao->getByID($a['target_user'])) {
+
                 $msg = sprintf(
                   "I have booked a %s for us on %s at %s %s%s - %s",
                   $a['event'],
@@ -246,7 +276,6 @@ class controller extends \Controller {
                   $name ? sprintf('with %s ', $name) : '',
                   $a['location'] ? sprintf('at %s ', $a['location']) : '',
                   currentUser::FirstName()
-
                 );
 
                 if (class_exists('\cms\sms')) {
@@ -262,14 +291,25 @@ class controller extends \Controller {
           }
 
           if ($notify_users) {
-            foreach ($notify_users as $user) $notifyUser('', $user);
+
+            $notified = [];
+            foreach ($notify_users as $user) {
+
+              if ($notifyUser('', $user)) {
+
+                $notified[] = ['id' => $user, 'date' => date('Y-m-d H:i:s')];
+              }
+            }
+
+            if ($notified) {
+
+              $dao->UpdateByID(['notify_users_sent' => json_encode($notified)], $id);
+            }
           }
 
           json::ack($action);
         }
-      } else {
-        json::nak($action);
-      }
+      } else json::nak($action);
     } elseif ('delete' == $action) {
       if (($id = (int)$this->getPost('id')) > 0) {
         $dao = new dao\diary_events;
