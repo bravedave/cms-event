@@ -95,7 +95,7 @@ class config extends cms\config {
 
 		// }
 		$dao = new dao\dbinfo(null, method_exists(__CLASS__, 'cmsStore') ? self::cmsStore() : self::dataPath());
-		$dao->checkVersion('cms_noleggio', self::cms_event_db_version);
+		$dao->checkVersion('cms_event', self::cms_event_db_version);
 	}
 
 	static function cms_event_config() {
